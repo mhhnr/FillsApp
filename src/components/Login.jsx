@@ -4,8 +4,10 @@ import { Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
 import { TouchableOpacity } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import { useRouter } from 'expo-router';
+export default function Login() { 
 
-export default function Login() {
+const router = useRouter();
   const translateY = useSharedValue(height);
 
   useEffect(() => {
@@ -69,9 +71,8 @@ export default function Login() {
             borderRadius: 20, // Changed to make the button rounded at the left and right corner
           }}
           activeOpacity={0.7}
-          onPress={() => {
-            // Add your animation or navigation logic here
-          }}
+          onPress={() => router.push('/auth/sign-in')}
+          
         >
           <Text style={{
             color: '#fff',
