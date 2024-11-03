@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import Animated, { 
   useAnimatedStyle, 
@@ -8,9 +8,37 @@ import Animated, {
 } from 'react-native-reanimated'
 import { Audio } from 'expo-av'
 
+// Import Voice conditionally
+let Voice;
+try {
+  Voice = require('@react-native-voice/voice').default;
+} catch (e) {
+  console.log('Voice module not available');
+}
+
 export default function Talk() {
   const [isRecording, setIsRecording] = useState(false)
   const [recording, setRecording] = useState(null)
+  const [transcribedText, setTranscribedText] = useState('')
+  const [isListening, setIsListening] = useState(false);
+
+  // Check if we're in Expo Go
+  const isExpoGo = !Platform.select({
+    web: false,
+    native: true,
+    default: false,
+  });
+
+  if (isExpoGo) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+        <Text style={{ textAlign: 'center', fontSize: 16 }}>
+          Speech-to-text is not available in Expo Go.{'\n\n'}
+          Please use a development build to access this feature.
+        </Text>
+      </View>
+    );
+  }
 
   const pulseStyle = useAnimatedStyle(() => {
     if (!isRecording) return { transform: [{ scale: 1 }] }
@@ -32,34 +60,57 @@ export default function Talk() {
 
   async function startRecording() {
     try {
-      await Audio.requestPermissionsAsync()
+      if (recording) {
+        console.log('Recording already exists, cleaning up...')
+        await recording.stopAndUnloadAsync()
+      }
+
+      console.log('Requesting permissions...')
+      const { status } = await Audio.requestPermissionsAsync()
+      if (status !== 'granted') {
+        console.log('Permission not granted!')
+        return
+      }
+
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: true,
         playsInSilentModeIOS: true,
       })
 
-      const { recording } = await Audio.Recording.createAsync(
-        Audio.RecordingOptionsPresets.HIGH_QUALITY
-      )
-      setRecording(recording)
+      console.log('Starting recording...')
+      const newRecording = new Audio.Recording()
+      await newRecording.prepareToRecordAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY)
+      await newRecording.startAsync()
+      setRecording(newRecording)
       setIsRecording(true)
     } catch (err) {
       console.error('Failed to start recording', err)
+      setIsRecording(false)
+      setRecording(null)
     }
   }
 
   async function stopRecording() {
     try {
-      if (!recording) return
+      if (!recording) {
+        console.log('No recording to stop')
+        setIsRecording(false)
+        return
+      }
 
+      console.log('Stopping recording...')
       await recording.stopAndUnloadAsync()
       const uri = recording.getURI()
       console.log('Recording stopped and stored at', uri)
+      
+      setTranscribedText('Your speech will be transcribed here...')
       
       setRecording(null)
       setIsRecording(false)
     } catch (err) {
       console.error('Failed to stop recording', err)
+      setIsRecording(false)
+      setRecording(null)
     }
   }
 
@@ -71,11 +122,58 @@ export default function Talk() {
     }
   }, [recording])
 
+  useEffect(() => {
+    // Only set up listeners if Voice is available
+    if (Voice) {
+      Voice.onSpeechStart = onSpeechStart;
+      Voice.onSpeechResults = onSpeechResults;
+      Voice.onSpeechError = onSpeechError;
+
+      return () => {
+        Voice?.destroy().then(Voice?.removeAllListeners);
+      };
+    }
+  }, []);
+
+  const onSpeechStart = () => {
+    console.log('Speech started');
+  };
+
+  const onSpeechResults = (e) => {
+    if (e?.value) {
+      const text = e.value[0];
+      console.log('Speech result:', text);
+      setTranscribedText(text);
+    }
+  };
+
+  const onSpeechError = (e) => {
+    console.error('Speech error:', e);
+  };
+
+  const startListening = async () => {
+    try {
+      await Voice.start('en-US'); // or your preferred language
+      setIsListening(true);
+    } catch (e) {
+      console.error('Error starting voice:', e);
+    }
+  };
+
+  const stopListening = async () => {
+    try {
+      await Voice.stop();
+      setIsListening(false);
+    } catch (e) {
+      console.error('Error stopping voice:', e);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.transcriptionContainer}>
         <Text style={styles.transcriptionText}>
-          Your speech will appear here...
+          {transcribedText || 'Your speech will appear here...'}
         </Text>
       </View>
 
@@ -95,12 +193,10 @@ export default function Talk() {
           </TouchableOpacity>
         </Animated.View>
 
-        {/* Submit button */}
         {transcribedText && (
           <TouchableOpacity 
             style={styles.submitButton}
             onPress={() => {
-              // TODO: Handle submit functionality
               console.log('Submitting:', transcribedText)
             }}
           >

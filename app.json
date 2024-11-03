@@ -31,15 +31,21 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      [
-        "expo-av",
-        {
-          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
-        }
-      ]
+      ["@react-native-voice/voice", {
+        "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+        "speechRecognitionPermission": "Allow $(PRODUCT_NAME) to access speech recognition"
+      }]
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "fonts": [
+      {
+        "asset": "./assets/fonts/Outfit-Medium.ttf"
+      }
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ]
   }
 }

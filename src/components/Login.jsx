@@ -5,6 +5,9 @@ const { width, height } = Dimensions.get('window');
 import { TouchableOpacity } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { useRouter } from 'expo-router';
+
+const landingImage = require('../../assets/images/landing.jpg');
+
 export default function Login() { 
 
 const router = useRouter();
@@ -26,12 +29,12 @@ const router = useRouter();
   return (
     <View style={{ flex: 1 }}>
       <Image
-        source={require('../../assets/images/landing.jpg')}
+        source={landingImage}
         style={{
-          width: width,       // 90% of the screen width, adaptable for any screen
-          height: height,      // Keeps a phone-like aspect ratio (adjust this as needed)
-          position: 'absolute',     // Maintains image proportions without stretching
-          resizeMode: 'cover',              // Optional rounded corners
+          width: width,
+          height: height,
+          position: 'absolute',
+          resizeMode: 'cover',
         }}
       />
 
