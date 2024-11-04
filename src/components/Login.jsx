@@ -3,14 +3,15 @@ import React, { useEffect } from 'react'
 import { Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
 import { TouchableOpacity } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import Animated, { 
+  useAnimatedStyle, 
+  useSharedValue, 
+  withSpring,
+} from 'react-native-reanimated';
 import { useRouter } from 'expo-router';
 
-const landingImage = require('../../assets/images/landing.jpg');
-
 export default function Login() { 
-
-const router = useRouter();
+  const router = useRouter();
   const translateY = useSharedValue(height);
 
   useEffect(() => {
@@ -18,7 +19,7 @@ const router = useRouter();
       damping: 15,
       stiffness: 100
     });
-  }, [translateY]);
+  }, []);
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -27,14 +28,15 @@ const router = useRouter();
   });
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: '#000000' }}>
       <Image
-        source={landingImage}
+        source={{ uri: 'https://thumbs.dreamstime.com/b/sample-taking-representative-random-larger-group-44215738.jpg' }}
         style={{
           width: width,
-          height: height,
+          height: height * 0.5,
           position: 'absolute',
-          resizeMode: 'cover',
+          top: height * 0.1,
+          resizeMode: 'contain',
         }}
       />
 
@@ -45,8 +47,8 @@ const router = useRouter();
         borderTopRightRadius: 30,
         position: 'absolute',
         bottom: 0,
-        width: width * 0.95, // Adjusted to be 95% of the screen width for better responsiveness
-        minHeight: height * 0.25, // Adjusted to be 25% of the screen height for better responsiveness
+        width: width * 0.95,
+        minHeight: height * 0.25,
         alignSelf: 'center',
         alignItems: 'center'
       }, animatedStyle]}>
@@ -71,11 +73,10 @@ const router = useRouter();
             backgroundColor: '#000',
             paddingVertical: 10,
             paddingHorizontal: 20,
-            borderRadius: 20, // Changed to make the button rounded at the left and right corner
+            borderRadius: 20,
           }}
           activeOpacity={0.7}
           onPress={() => router.push('/auth/sign-in')}
-          
         >
           <Text style={{
             color: '#fff',
@@ -86,6 +87,5 @@ const router = useRouter();
         </TouchableOpacity>
       </Animated.View>
     </View>
-  ) 
-
+  );
 }

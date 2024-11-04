@@ -8,7 +8,8 @@ module.exports = api => {
         'module-resolver',
         {
           alias: {
-            '@react-native-voice/voice': '@react-native-voice/voice'
+            '@react-native-voice/voice': '@react-native-voice/voice',
+            '@assets': './assets'
           }
         }
       ]
