@@ -196,7 +196,7 @@ export default function SignUp() {
                     onChangeText={(text) => setFormData({...formData, firstName: text})} // Update first name
                     maxLength={30}
                 />
-                {errors.firstName && <Text style={styles.errorText}>{errors.firstName}</Text>} // Display error message
+                {errors.firstName && <Text style={styles.errorText}>{errors.firstName}</Text>}
 
                 <TextInput 
                     style={[styles.input, errors.lastName && styles.inputError]} // Apply error style if there's an error
@@ -206,7 +206,7 @@ export default function SignUp() {
                     onChangeText={(text) => setFormData({...formData, lastName: text})} // Update last name
                     maxLength={30}
                 />
-                {errors.lastName && <Text style={styles.errorText}>{errors.lastName}</Text>} // Display error message
+                {errors.lastName && <Text style={styles.errorText}>{errors.lastName}</Text>}
 
                 <TextInput 
                     style={[styles.input, errors.email && styles.inputError]} // Apply error style if there's an error
@@ -218,7 +218,7 @@ export default function SignUp() {
                     onChangeText={(text) => setFormData({...formData, email: text})} // Update email
                     maxLength={50}
                 />
-                {errors.email && <Text style={styles.errorText}>{errors.email}</Text>} // Display error message
+                {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
 
                 <TextInput 
                     style={[styles.input, errors.password && styles.inputError]} // Apply error style if there's an error
@@ -229,7 +229,7 @@ export default function SignUp() {
                     onChangeText={(text) => setFormData({...formData, password: text})} // Update password
                     maxLength={30}
                 />
-                {errors.password && <Text style={styles.errorText}>{errors.password}</Text>} // Display error message
+                {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
 
                 <TextInput 
                     style={[styles.input, errors.confirmPassword && styles.inputError]} // Apply error style if there's an error
@@ -240,8 +240,8 @@ export default function SignUp() {
                     onChangeText={(text) => setFormData({...formData, confirmPassword: text})} // Update confirm password
                     maxLength={30}
                 />
-                {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>} // Display error message
-                {errors.submit && <Text style={styles.errorText}>{errors.submit}</Text>} // Display submission error message
+                {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
+                {errors.submit && <Text style={styles.errorText}>{errors.submit}</Text>}
 
                 <TouchableOpacity 
                     style={[styles.signUpButton, isLoading && styles.disabledButton]} // Disable button if loading

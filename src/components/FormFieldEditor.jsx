@@ -163,7 +163,7 @@ export default function FormFieldEditor({ field, onUpdate, onDelete, onDuplicate
               value={field.characterLimit?.toString()}
               onChangeText={(text) => onUpdate(field.id, { 
                 ...field, 
-                characterLimit: text ? parseInt(text) : null 
+                characterLimit: text ? Number.parseInt(text) : null 
               })}
               keyboardType="numeric"
               placeholder="No limit"
