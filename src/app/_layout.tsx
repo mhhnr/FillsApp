@@ -17,6 +17,7 @@ import { Stack } from "expo-router"; // Importing Stack for navigation
 import { useFonts } from "expo-font"; // Importing useFonts for loading custom fonts
 import * as SplashScreen from 'expo-splash-screen'; // Importing SplashScreen for managing splash screen
 import { useEffect } from "react"; // Importing useEffect for side effects in functional components
+import { FormProvider } from '../contexts/FormContext';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync(); // Prevents the splash screen from hiding automatically
@@ -51,8 +52,10 @@ export default function RootLayout() {
 
   // Render the Stack component for navigation
   return (
-    <Stack screenOptions={{headerShown: false}}> {/* Hides the header for all screens */}
-      <Stack.Screen name="(tabs)" /> {/* Main screen of the application */}
-    </Stack>
+    <FormProvider>
+      <Stack screenOptions={{headerShown: false}}> {/* Hides the header for all screens */}
+        <Stack.Screen name="(tabs)" /> {/* Main screen of the application */}
+      </Stack>
+    </FormProvider>
   );
 }

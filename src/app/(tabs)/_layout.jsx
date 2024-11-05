@@ -48,7 +48,13 @@ const LogoutButton = () => (
     onPress={handleLogout} // Trigger logout on press
     style={{ marginRight: 15 }} // Style for the button
   >
-    <Text style={{ color: '#007AFF', fontSize: 16 }}>Logout</Text> // Text for the button
+    <Text style={{ 
+      color: '#007AFF', 
+      fontSize: 16,
+      fontFamily: 'outfit-medium'
+    }}>
+      Logout
+    </Text>
   </TouchableOpacity>
 );
 
