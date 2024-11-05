@@ -10,16 +10,13 @@ const sampleTemplates = [
       { id: '1', type: 'text', label: 'Name' },
       { id: '2', type: 'date', label: 'Date of Birth' },
       { id: '3', type: 'text', label: 'Occupation' },
-      // Add more fields as needed
     ],
   },
-  // Add more templates as needed
 ];
 
 export default function FormChoose() {
   const handleSelectTemplate = (template) => {
     console.log('Selected template:', template);
-    // Handle template selection
   };
 
   return (

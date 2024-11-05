@@ -15,38 +15,90 @@
 
 import { Tabs } from "expo-router"; // Importing Tabs component for tab navigation
 import { Ionicons } from "@expo/vector-icons"; // Importing Ionicons for tab icons
-import { TouchableOpacity, Text } from 'react-native'; // Importing TouchableOpacity and Text for UI elements
+import { TouchableOpacity, Text, StyleSheet, View } from 'react-native'; // Importing TouchableOpacity, Text, StyleSheet, and View for UI elements
 import { useRouter } from 'expo-router'; // Importing useRouter hook for navigation
 import { auth } from '../../configs/FirebaseConfig'; // Importing auth for Firebase authentication
+import { useAppFonts } from '../../utils/fonts';
+import * as SplashScreen from 'expo-splash-screen';
+import { useCallback } from 'react';
+
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
 
 /**
- * Handles user logout by signing out from Firebase and redirecting to the home screen.
+ * Renders the TabLayout component with tab screens for navigation.
  * 
- * @async
- * @function handleLogout
- * @returns {Promise<void>} 
+ * @returns {JSX.Element} The TabLayout component containing tab screens.
  */
-const handleLogout = async () => {
-  try {
-    await auth.signOut(); // Sign out from Firebase
-    router.replace('/'); // Redirect to the home screen
-  } catch (error) {
-    console.error('Error signing out:', error); // Log any errors during sign out
+export default function TabLayout() {
+  const router = useRouter(); // Initialize router for navigation
+  const { fontsLoaded, onLayoutRootView } = useAppFonts();
+
+  const handleLogout = async () => {
+    try {
+      await auth.signOut();
+      router.replace('/');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
+  if (!fontsLoaded) {
+    return null;
   }
-};
 
-/**
- * LogoutButton Component
- * 
- * This component renders a button that allows users to log out of their account.
- * It triggers the handleLogout function when pressed.
- * 
- * @returns {JSX.Element} A TouchableOpacity component that serves as the logout button.
- */
-const LogoutButton = () => (
+  return (
+    <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+      <Tabs 
+        screenOptions={{
+          headerRight: () => <LogoutButton onLogout={handleLogout} />,
+        }}
+      >
+        <Tabs.Screen
+          name="formChoose"
+          options={{
+            title: "Choose Form",
+            tabBarIcon: ({ color }) => (
+              <Ionicons name="document-outline" size={24} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="talk"
+          options={{
+            title: "Talk",
+            tabBarIcon: ({ color }) => (
+              <Ionicons name="mic-outline" size={24} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="makeForm"
+          options={{
+            title: "Make Form",
+            tabBarIcon: ({ color }) => (
+              <Ionicons name="create-outline" size={24} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="savedForms"
+          options={{
+            title: "Saved Forms",
+            tabBarIcon: ({ color }) => (
+              <Ionicons name="save-outline" size={24} color={color} />
+            ),
+          }}
+        />
+      </Tabs>
+    </View>
+  );
+} 
+
+const LogoutButton = ({ onLogout }) => (
   <TouchableOpacity 
-    onPress={handleLogout} // Trigger logout on press
-    style={{ marginRight: 15 }} // Style for the button
+    onPress={onLogout}
+    style={{ marginRight: 15 }}
   >
     <Text style={{ 
       color: '#007AFF', 
@@ -57,56 +109,3 @@ const LogoutButton = () => (
     </Text>
   </TouchableOpacity>
 );
-
-/**
- * Renders the TabLayout component with tab screens for navigation.
- * 
- * @returns {JSX.Element} The TabLayout component containing tab screens.
- */
-export default function TabLayout() {
-  const router = useRouter(); // Initialize router for navigation
-
-  return (
-    <Tabs screenOptions={{
-      headerRight: () => <LogoutButton />, // Render LogoutButton in the header
-    }}>
-
-      <Tabs.Screen
-        name="formChoose"
-        options={{
-          title: "Choose Form", // Title for the tab
-          tabBarIcon: ({ color }) => ( // Icon for the tab
-            <Ionicons name="document-outline" size={24} color={color} />
-          ),
-        }}
-      />
-            <Tabs.Screen
-        name="talk"
-        options={{
-          title: "Talk", // Title for the tab
-          tabBarIcon: ({ color }) => ( // Icon for the tab
-            <Ionicons name="mic-outline" size={24} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="makeForm"
-        options={{
-          title: "Make Form", // Title for the tab
-          tabBarIcon: ({ color }) => ( // Icon for the tab
-            <Ionicons name="create-outline" size={24} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="savedForms"
-        options={{
-          title: "Saved Forms", // Title for the tab
-          tabBarIcon: ({ color }) => ( // Icon for the tab
-            <Ionicons name="save-outline" size={24} color={color} />
-          ),
-        }}
-      />
-    </Tabs>
-  );
-} 

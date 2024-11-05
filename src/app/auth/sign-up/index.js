@@ -18,7 +18,7 @@
 
 import { View, Text, TextInput, TouchableOpacity, Dimensions, StyleSheet, Animated, Platform } from 'react-native';
 import React, { useEffect, useRef, useMemo, useState } from 'react';
-import { useFonts } from 'expo-font';
+import { useAppFonts } from '../../../utils/fonts';
 import { useRouter } from 'expo-router';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -57,10 +57,7 @@ export default function SignUp() {
     const navigation = useNavigation();
 
     // Load custom fonts for the component
-    const [loaded] = useFonts({
-        'Outfit-Regular': require('../../../../assets/fonts/Outfit-Regular.ttf'),
-        'Outfit-Bold': require('../../../../assets/fonts/Outfit-Bold.ttf'),
-    });
+    const loaded = useAppFonts();
 
     /**
      * handleCreateAccount Function

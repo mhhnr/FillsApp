@@ -23,7 +23,9 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": ["RECORD_AUDIO"]
+      "permissions": [
+        "RECORD_AUDIO"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -31,17 +33,30 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      ["@react-native-voice/voice", {
-        "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
-        "speechRecognitionPermission": "Allow $(PRODUCT_NAME) to access speech recognition"
-      }]
+      [
+        "@react-native-voice/voice",
+        {
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+          "speechRecognitionPermission": "Allow $(PRODUCT_NAME) to access speech recognition"
+        }
+      ],
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true
     },
     "fonts": [
       {
-        "asset": "./assets/fonts/Outfit-Medium.ttf"
+        "asset": "./assets/fonts/Outfit-Regular.ttf",
+        "family": "outfit-regular"
+      },
+      {
+        "asset": "./assets/fonts/Outfit-Medium.ttf",
+        "family": "outfit-medium"
+      },
+      {
+        "asset": "./assets/fonts/Outfit-Bold.ttf",
+        "family": "outfit-bold"
       }
     ],
     "assetBundlePatterns": [

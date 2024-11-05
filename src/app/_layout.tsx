@@ -14,13 +14,10 @@
  */
 
 import { Stack } from "expo-router"; // Importing Stack for navigation
-import { useFonts } from "expo-font"; // Importing useFonts for loading custom fonts
-import * as SplashScreen from 'expo-splash-screen'; // Importing SplashScreen for managing splash screen
-import { useEffect } from "react"; // Importing useEffect for side effects in functional components
+import { View } from "react-native"; // Importing View for styling
+import { useAppFonts } from '../utils/fonts';  // Adjust the path based on file location
+import AppLoading from '../components/AppLoading';
 import { FormProvider } from '../contexts/FormContext';
-
-// Keep the splash screen visible while we fetch resources
-SplashScreen.preventAutoHideAsync(); // Prevents the splash screen from hiding automatically
 
 /**
  * RootLayout Function Component
@@ -33,29 +30,17 @@ SplashScreen.preventAutoHideAsync(); // Prevents the splash screen from hiding a
  * - A Stack component that contains the main application screens.
  */
 export default function RootLayout() {
-  // Load custom fonts and store the loading status
-  const [loaded] = useFonts({
-    'outfit': require('../../assets/fonts/Outfit-Regular.ttf'), // Regular font
-    'outfit-medium': require('../../assets/fonts/Outfit-Medium.ttf'), // Medium font
-    'outfit-bold': require('../../assets/fonts/Outfit-Bold.ttf'), // Bold font
-  });
+  const { fontsLoaded, onLayoutRootView } = useAppFonts();
 
-  // Effect to hide the splash screen once fonts are loaded
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync(); // Hide the splash screen when fonts are loaded
-    }
-  }, [loaded]); // Dependency array includes 'loaded' to trigger effect on change
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
 
-  // If fonts are not loaded yet, return null to prevent rendering
-  if (!loaded) return null;
-
-  // Render the Stack component for navigation
   return (
-    <FormProvider>
-      <Stack screenOptions={{headerShown: false}}> {/* Hides the header for all screens */}
-        <Stack.Screen name="(tabs)" /> {/* Main screen of the application */}
-      </Stack>
-    </FormProvider>
+    <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+      <FormProvider>
+        <Stack screenOptions={{ headerShown: false }} />
+      </FormProvider>
+    </View>
   );
 }
