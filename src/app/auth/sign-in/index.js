@@ -1,30 +1,64 @@
-import { View, Text, TextInput, TouchableOpacity, Dimensions, StyleSheet, Animated } from 'react-native'
-import React, { useEffect, useRef, useMemo, useState } from 'react'
-import { useFonts } from 'expo-font'
-import { useRouter } from 'expo-router'
-import { useNavigation } from '@react-navigation/native'
+/**
+ * SignIn Component
+ * 
+ * This component represents the sign-in screen of the application. 
+ * It allows users to enter their email and password to log in. 
+ * The component includes animations for a smooth user experience 
+ * and handles authentication using Firebase.
+ * 
+ * Dependencies:
+ * - react-native: For building the UI components.
+ * - expo-font: For loading custom fonts.
+ * - expo-router: For navigation between screens.
+ * - @react-navigation/native: For navigation functionalities.
+ * - firebase/auth: For handling user authentication.
+ * - Ionicons: For using icons in the UI.
+ */
+
+import { View, Text, TextInput, TouchableOpacity, Dimensions, StyleSheet, Animated } from 'react-native';
+import React, { useEffect, useRef, useMemo, useState } from 'react';
+import { useFonts } from 'expo-font';
+import { useRouter } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../../configs/FirebaseConfig';
 
+/**
+ * SignIn Function Component
+ * 
+ * This function component handles the rendering of the sign-in screen.
+ * It manages the state for form data, loading status, and error messages.
+ * It also handles user authentication and animations for the UI.
+ */
 export default function SignIn() {
+    // Load custom fonts for the component
     const [loaded] = useFonts({
         'Outfit-Regular': require('../../../../assets/fonts/Outfit-Regular.ttf'),
         'Outfit-Bold': require('../../../../assets/fonts/Outfit-Bold.ttf'),
     });
 
+    // State to manage form data for email and password
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
+
+    // State to manage error messages
     const [errors, setErrors] = useState({});
+
+    // State to manage loading status during sign-in
     const [isLoading, setIsLoading] = useState(false);
 
+    // Animated values for fade and slide animations
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const slideAnim = useRef(new Animated.Value(50)).current;
+
+    // Router and navigation hooks for navigation functionalities
     const router = useRouter();
     const navigation = useNavigation();
 
+    // Memoized animations for fade and slide effects
     const animations = useMemo(() => ({
         fade: Animated.timing(fadeAnim, {
             toValue: 1,
@@ -38,6 +72,7 @@ export default function SignIn() {
         })
     }), [fadeAnim, slideAnim]);
 
+    // Effect to set navigation options and start animations
     useEffect(() => {
         navigation.setOptions({
             headerShown: false,
@@ -45,22 +80,33 @@ export default function SignIn() {
         Animated.parallel([animations.fade, animations.slide]).start();
     }, [navigation, animations]);
 
+    // Return null if fonts are not loaded yet
     if (!loaded) return null;
 
+    /**
+     * handleSignIn Function
+     * 
+     * This asynchronous function handles the sign-in process.
+     * It attempts to sign in the user with the provided email and password.
+     * If successful, it navigates to the main application screen.
+     * If an error occurs, it sets the appropriate error message.
+     */
     const handleSignIn = async () => {
-        setIsLoading(true);
+        setIsLoading(true); // Set loading state to true
         try {
+            // Attempt to sign in with email and password
             const userCredential = await signInWithEmailAndPassword(
                 auth,
                 formData.email,
                 formData.password
             );
             console.log('User signed in:', userCredential.user);
-            router.replace('/(tabs)/talk');
+            router.replace('/(tabs)/talk'); // Navigate to the main screen
         } catch (error) {
             console.error('Sign-in error:', error);
             let errorMessage = 'Failed to sign in';
             
+            // Determine the error message based on the error code
             switch (error.code) {
                 case 'auth/invalid-email':
                     errorMessage = 'Invalid email address';
@@ -73,15 +119,15 @@ export default function SignIn() {
                     errorMessage = 'Invalid email or password';
                     break;
             }
-            setErrors({ submit: errorMessage });
+            setErrors({ submit: errorMessage }); // Set the error message
         } finally {
-            setIsLoading(false);
+            setIsLoading(false); // Reset loading state
         }
     };
 
     return (
         <View style={styles.container}>
-                      <TouchableOpacity 
+            <TouchableOpacity 
                 style={styles.backButton} 
                 onPress={() => navigation.goBack()} // Navigate back on press
             >
@@ -126,13 +172,13 @@ export default function SignIn() {
                 <TouchableOpacity 
                     style={styles.createAccountButton}
                     activeOpacity={0.7} // Optimize touch feedback
-                    onPress={() => router.replace('auth/sign-up')} // Corrected path to SignUp screen
+                    onPress={() => router.replace('auth/sign-up')} // Navigate to SignUp screen
                 >
                     <Text style={styles.createAccountText}>Create Account</Text>
                 </TouchableOpacity>
             </Animated.View>
         </View>
-    )
+    );
 }
 
 // Memoize dimensions to prevent recalculation
