@@ -70,21 +70,22 @@ export default function TabLayout() {
     <Tabs screenOptions={{
       headerRight: () => <LogoutButton />, // Render LogoutButton in the header
     }}>
-      <Tabs.Screen
-        name="talk"
-        options={{
-          title: "Talk", // Title for the tab
-          tabBarIcon: ({ color }) => ( // Icon for the tab
-            <Ionicons name="mic-outline" size={24} color={color} />
-          ),
-        }}
-      />
+
       <Tabs.Screen
         name="formChoose"
         options={{
           title: "Choose Form", // Title for the tab
           tabBarIcon: ({ color }) => ( // Icon for the tab
             <Ionicons name="document-outline" size={24} color={color} />
+          ),
+        }}
+      />
+            <Tabs.Screen
+        name="talk"
+        options={{
+          title: "Talk", // Title for the tab
+          tabBarIcon: ({ color }) => ( // Icon for the tab
+            <Ionicons name="mic-outline" size={24} color={color} />
           ),
         }}
       />
