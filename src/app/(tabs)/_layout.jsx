@@ -1,18 +1,3 @@
-/**
- * TabLayout Component
- * 
- * This component serves as the layout for the tab navigation in the application.
- * It utilizes the `expo-router` library to create a tabbed interface, allowing users
- * to navigate between different screens. The component also includes a logout button
- * that enables users to sign out of their account.
- * 
- * Dependencies:
- * - expo-router: For routing and navigation functionalities.
- * - @expo/vector-icons: For using Ionicons as tab bar icons.
- * - react-native: For building the UI components.
- * - FirebaseConfig: For accessing Firebase authentication methods.
- */
-
 import { Tabs } from "expo-router"; // Importing Tabs component for tab navigation
 import { Ionicons } from "@expo/vector-icons"; // Importing Ionicons for tab icons
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native'; // Importing TouchableOpacity, Text, StyleSheet, and View for UI elements
@@ -55,15 +40,6 @@ export default function TabLayout() {
         }}
       >
         <Tabs.Screen
-          name="formChoose"
-          options={{
-            title: "Choose Form",
-            tabBarIcon: ({ color }) => (
-              <Ionicons name="document-outline" size={24} color={color} />
-            ),
-          }}
-        />
-        <Tabs.Screen
           name="talk"
           options={{
             title: "Talk",
@@ -87,6 +63,15 @@ export default function TabLayout() {
             title: "Saved Forms",
             tabBarIcon: ({ color }) => (
               <Ionicons name="save-outline" size={24} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="filledForms"
+          options={{
+            title: "Filled Forms",
+            tabBarIcon: ({ color }) => (
+              <Ionicons name="document-text-outline" size={24} color={color} />
             ),
           }}
         />

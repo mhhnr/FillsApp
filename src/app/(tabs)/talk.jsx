@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, Platform, TextInput } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import Animated, { 
   useAnimatedStyle, 
@@ -172,9 +172,14 @@ export default function Talk() {
   return (
     <View style={styles.container}>
       <View style={styles.transcriptionContainer}>
-        <Text style={styles.transcriptionText}>
-          {transcribedText || 'Your speech will appear here...'}
-        </Text>
+        <TextInput
+          style={styles.transcriptionText}
+          value={transcribedText}
+          onChangeText={setTranscribedText}
+          multiline
+          placeholder="Your speech will appear here..."
+          placeholderTextColor="#666666"
+        />
       </View>
 
       <View style={styles.controlsContainer}>
@@ -221,12 +226,14 @@ const styles = StyleSheet.create({
     borderColor: '#E0E0E0',
     padding: 16,
     marginBottom: 20,
-    marginTop: 40, // Add some top margin for better spacing
+    marginTop: 40,
   },
   transcriptionText: {
     fontFamily: 'outfit-medium',
     fontSize: 16,
     color: '#333333',
+    flex: 1,
+    textAlignVertical: 'top',
   },
   controlsContainer: {
     alignItems: 'center',
@@ -244,8 +251,8 @@ const styles = StyleSheet.create({
     borderColor: '#000000',
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 3, // Android shadow
-    shadowColor: '#000000', // iOS shadow
+    elevation: 3,
+    shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,

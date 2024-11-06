@@ -1,21 +1,3 @@
-/**
- * SignUp Component
- * 
- * This component represents the sign-up screen of the application. 
- * It allows users to create a new account by entering their first name, 
- * last name, email, password, and confirming their password. 
- * The component includes animations for a smooth user experience 
- * and handles user registration using Firebase.
- * 
- * Dependencies:
- * - react-native: For building the UI components.
- * - expo-font: For loading custom fonts.
- * - expo-router: For navigation between screens.
- * - @react-navigation/native: For navigation functionalities.
- * - firebase/auth: For handling user authentication.
- * - Ionicons: For using icons in the UI.
- */
-
 import { View, Text, TextInput, TouchableOpacity, Dimensions, StyleSheet, Animated, Platform } from 'react-native';
 import React, { useEffect, useRef, useMemo, useState } from 'react';
 import { useAppFonts } from '../../../utils/fonts';
