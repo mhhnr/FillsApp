@@ -6,9 +6,10 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { useAppFonts } from "../utils/fonts";
 import AppLoading from "../components/AppLoading";
+import type { User } from "firebase/auth";
 
 export default function Index() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const { fontsLoaded, onLayoutRootView } = useAppFonts();
 

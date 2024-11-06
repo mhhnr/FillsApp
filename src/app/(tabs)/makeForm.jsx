@@ -130,7 +130,7 @@ export default function MakeForm() {
         ))}
 
         <TouchableOpacity 
-          style={styles.addFieldButton}
+          style={styles.addQuestionButton}
           onPress={() => setShowFieldTypes(!showFieldTypes)}
         >
           <Ionicons name="add-circle-outline" size={24} color="#000000" />
@@ -205,13 +205,13 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 12,
   },
-  addFieldButton: {
-    flex: 1,
-    minWidth: 100,
+  addQuestionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#F5F5F5',
     padding: 16,
     borderRadius: 8,
-    alignItems: 'center',
+    marginVertical: 16,
   },
   addFieldButtonText: {
     fontFamily: 'outfit-medium',
@@ -255,14 +255,6 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     fontFamily: 'outfit-medium',
     fontSize: 16,
-  },
-  addFieldButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F5F5F5',
-    padding: 16,
-    borderRadius: 8,
-    marginVertical: 16,
   },
   addFieldText: {
     marginLeft: 8,

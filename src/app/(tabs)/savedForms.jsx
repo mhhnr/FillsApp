@@ -4,16 +4,16 @@ import { useFormContext } from '../../contexts/FormContext';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function SavedForms() {
-  const { savedForms, deleteForm } = useFormContext();
+  const { forms, deleteForm } = useFormContext();
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Saved Forms</Text>
       <ScrollView style={styles.scrollView}>
-        {savedForms.length === 0 ? (
+        {forms.length === 0 ? (
           <Text style={styles.emptyText}>No saved forms yet</Text>
         ) : (
-          savedForms.map((form) => (
+          forms.map((form) => (
             <View key={form.id} style={styles.formCard}>
               <View style={styles.formInfo}>
                 <Text style={styles.formTitle}>{form.title}</Text>

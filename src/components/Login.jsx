@@ -1,15 +1,4 @@
-/**
- * Login Component
- * 
- * This component represents the login screen of the application. 
- * It features an animated entrance effect for the login form, 
- * a background image, and a button to navigate to the sign-in page.
- * 
- * Dependencies:
- * - react-native: For building the UI components.
- * - react-native-reanimated: For creating smooth animations.
- * - expo-router: For navigation between screens.
- */
+
 
 import { View, Text, Image } from 'react-native';
 import React, { useEffect } from 'react';
