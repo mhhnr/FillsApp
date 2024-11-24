@@ -11,7 +11,7 @@ export default function FormTemplate({ template, onSelect }) {
       <View style={styles.content}>
         <Text style={styles.title}>{template.name}</Text>
         <Text style={styles.fieldCount}>
-          {template.fields.length} fields
+          {template.fields?.length || 0} fields
         </Text>
       </View>
       <Ionicons name="chevron-forward" size={24} color="#000" />

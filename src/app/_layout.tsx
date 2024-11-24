@@ -1,24 +1,21 @@
-
-
-import { Stack } from "expo-router"; // Importing Stack for navigation
-import { View } from "react-native"; // Importing View for styling
-import { useAppFonts } from '../utils/fonts';  // Adjust the path based on file location
-import AppLoading from '../components/AppLoading';
+import { Stack } from "expo-router";
 import { FormProvider } from '../contexts/FormContext';
 
-
 export default function RootLayout() {
-  const { fontsLoaded, onLayoutRootView } = useAppFonts();
-
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
-
   return (
-    <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <FormProvider>
-        <Stack screenOptions={{ headerShown: false }} />
-      </FormProvider>
-    </View>
+    <FormProvider>
+      <Stack>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen 
+          name="viewTemplate" 
+          options={{ 
+            presentation: 'modal',
+            title: 'View Template',
+            headerShown: true
+          }} 
+        />
+      </Stack>
+    </FormProvider>
   );
 }

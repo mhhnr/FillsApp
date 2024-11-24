@@ -3,13 +3,15 @@ import { View, Text, ScrollView, TextInput, TouchableOpacity, StyleSheet, Alert 
 import { Ionicons } from '@expo/vector-icons';
 import FormFieldEditor from '../../components/FormFieldEditor';
 import { useFormContext } from '../../contexts/FormContext';
+import { auth } from '../../configs/FirebaseConfig';
 
 export default function MakeForm() {
-  const { saveForm } = useFormContext();
+  const { saveTemplate } = useFormContext();
   const [formTitle, setFormTitle] = useState('');
   const [formDescription, setFormDescription] = useState('');
   const [fields, setFields] = useState([]);
   const [showFieldTypes, setShowFieldTypes] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fieldTypes = [
     { id: 'short_text', label: 'Short Text', icon: 'text-outline' },
@@ -76,24 +78,39 @@ export default function MakeForm() {
     setFields(fields.filter(field => field.id !== fieldId));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!formTitle.trim()) {
-      alert('Please enter a form title');
+      Alert.alert('Error', 'Please enter a form title');
       return;
     }
-    
-    const newForm = {
-      id: Date.now().toString(),
-      title: formTitle,
-      description: formDescription,
-      fields,
-      createdAt: new Date().toISOString(),
-    };
-    
-    saveForm(newForm);
-    setFormTitle('');
-    setFormDescription('');
-    setFields([]);
+
+    if (fields.length === 0) {
+      Alert.alert('Error', 'Please add at least one field to the form');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const template = {
+        title: formTitle,
+        description: formDescription,
+        fields: fields,
+        userId: auth.currentUser.uid,
+        createdAt: new Date().toISOString()
+      };
+
+      await saveTemplate(template);
+      Alert.alert('Success', 'Form template saved successfully');
+      
+      // Reset form
+      setFormTitle('');
+      setFormDescription('');
+      setFields([]);
+    } catch (error) {
+      Alert.alert('Error', error.message || 'Failed to save form template');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -124,28 +141,30 @@ export default function MakeForm() {
             onUpdate={updateField}
             onDelete={deleteField}
             onDuplicate={duplicateField}
-            onMoveUp={(id) => moveField(id, 'up')}
-            onMoveDown={(id) => moveField(id, 'down')}
+            onMove={moveField}
           />
         ))}
 
-        <TouchableOpacity 
-          style={styles.addQuestionButton}
+        <TouchableOpacity
+          style={styles.addButton}
           onPress={() => setShowFieldTypes(!showFieldTypes)}
         >
-          <Ionicons name="add-circle-outline" size={24} color="#000000" />
-          <Text style={styles.addFieldText}>Add Question</Text>
+          <Ionicons name="add-circle-outline" size={24} color="#007AFF" />
+          <Text style={styles.addButtonText}>Add Field</Text>
         </TouchableOpacity>
 
         {showFieldTypes && (
-          <View style={styles.fieldTypesContainer}>
+          <View style={styles.fieldTypesList}>
             {fieldTypes.map(type => (
               <TouchableOpacity
                 key={type.id}
                 style={styles.fieldTypeButton}
-                onPress={() => addField(type.id)}
+                onPress={() => {
+                  addField(type.id);
+                  setShowFieldTypes(false);
+                }}
               >
-                <Ionicons name={type.icon} size={24} color="#000000" />
+                <Ionicons name={type.icon} size={24} color="#007AFF" />
                 <Text style={styles.fieldTypeText}>{type.label}</Text>
               </TouchableOpacity>
             ))}
@@ -153,11 +172,14 @@ export default function MakeForm() {
         )}
       </ScrollView>
 
-      <TouchableOpacity 
-        style={styles.saveButton}
+      <TouchableOpacity
+        style={[styles.saveButton, isLoading && styles.saveButtonDisabled]}
         onPress={handleSave}
+        disabled={isLoading}
       >
-        <Text style={styles.saveButtonText}>Save Form</Text>
+        <Text style={styles.saveButtonText}>
+          {isLoading ? 'Saving...' : 'Save Form'}
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -205,7 +227,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 12,
   },
-  addQuestionButton: {
+  addButton: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F5F5F5',
@@ -213,7 +235,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginVertical: 16,
   },
-  addFieldButtonText: {
+  addButtonText: {
     fontFamily: 'outfit-medium',
     fontSize: 14,
     marginTop: 8,

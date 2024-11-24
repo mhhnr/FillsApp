@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet, Platform, TextInput } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import Animated, { 
   useAnimatedStyle, 
@@ -21,24 +21,6 @@ export default function Talk() {
   const [recording, setRecording] = useState(null)
   const [transcribedText, setTranscribedText] = useState('')
   const [isListening, setIsListening] = useState(false);
-
-  // Check if we're in Expo Go
-  const isExpoGo = !Platform.select({
-    web: false,
-    native: true,
-    default: false,
-  });
-
-  if (isExpoGo) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
-        <Text style={{ textAlign: 'center', fontSize: 16 }}>
-          Speech-to-text is not available in Expo Go.{'\n\n'}
-          Please use a development build to access this feature.
-        </Text>
-      </View>
-    );
-  }
 
   const pulseStyle = useAnimatedStyle(() => {
     if (!isRecording) return { transform: [{ scale: 1 }] }
