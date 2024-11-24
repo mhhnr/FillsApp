@@ -1,22 +1,13 @@
-import { Tabs } from "expo-router"; // Importing Tabs component for tab navigation
-import { Ionicons } from "@expo/vector-icons"; // Importing Ionicons for tab icons
-import { TouchableOpacity, Text, StyleSheet, View } from 'react-native'; // Importing TouchableOpacity, Text, StyleSheet, and View for UI elements
-import { useRouter } from 'expo-router'; // Importing useRouter hook for navigation
-import { auth } from '../../configs/FirebaseConfig'; // Importing auth for Firebase authentication
-import { useAppFonts } from '../../utils/fonts';
-import * as SplashScreen from 'expo-splash-screen';
-import { useCallback } from 'react';
+import { Tabs } from "expo-router";
+import { View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useAppFonts } from "../../utils/fonts";
+import LogoutButton from "../../components/LogoutButton";
+import { useRouter } from "expo-router";
+import { auth } from "../../configs/FirebaseConfig";
 
-// Keep the splash screen visible while we fetch resources
-SplashScreen.preventAutoHideAsync();
-
-/**
- * Renders the TabLayout component with tab screens for navigation.
- * 
- * @returns {JSX.Element} The TabLayout component containing tab screens.
- */
 export default function TabLayout() {
-  const router = useRouter(); // Initialize router for navigation
+  const router = useRouter();
   const { fontsLoaded, onLayoutRootView } = useAppFonts();
 
   const handleLogout = async () => {
@@ -49,48 +40,24 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="makeForm"
+          name="templates"
           options={{
-            title: "Make Form",
+            title: "Templates",
             tabBarIcon: ({ color }) => (
-              <Ionicons name="create-outline" size={24} color={color} />
+              <Ionicons name="document-outline" size={24} color={color} />
             ),
           }}
         />
         <Tabs.Screen
-          name="savedForms"
+          name="forms"
           options={{
-            title: "Saved Forms",
+            title: "Forms",
             tabBarIcon: ({ color }) => (
-              <Ionicons name="save-outline" size={24} color={color} />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="filledForms"
-          options={{
-            title: "Filled Forms",
-            tabBarIcon: ({ color }) => (
-              <Ionicons name="document-text-outline" size={24} color={color} />
+              <Ionicons name="folder-outline" size={24} color={color} />
             ),
           }}
         />
       </Tabs>
     </View>
   );
-} 
-
-const LogoutButton = ({ onLogout }) => (
-  <TouchableOpacity 
-    onPress={onLogout}
-    style={{ marginRight: 15 }}
-  >
-    <Text style={{ 
-      color: '#007AFF', 
-      fontSize: 16,
-      fontFamily: 'outfit-medium'
-    }}>
-      Logout
-    </Text>
-  </TouchableOpacity>
-);
+}

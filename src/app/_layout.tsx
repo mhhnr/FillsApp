@@ -15,6 +15,14 @@ export default function RootLayout() {
             headerShown: true
           }} 
         />
+        <Stack.Screen 
+          name="makeForm" 
+          options={{ 
+            presentation: 'modal',
+            title: 'Create Template',
+            headerShown: true
+          }} 
+        />
       </Stack>
     </FormProvider>
   );

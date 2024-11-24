@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import FormFieldEditor from '../../components/FormFieldEditor';
-import { useFormContext } from '../../contexts/FormContext';
-import { auth } from '../../configs/FirebaseConfig';
+import FormFieldEditor from '../components/FormFieldEditor';
+import { useFormContext } from '../contexts/FormContext';
+import { auth } from '../configs/FirebaseConfig';
 
 export default function MakeForm() {
   const { saveTemplate } = useFormContext();

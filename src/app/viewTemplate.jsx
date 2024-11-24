@@ -1,15 +1,28 @@
-import React from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useFormContext } from '../contexts/FormContext';
 import { Ionicons } from '@expo/vector-icons';
+import FormFieldEditor from '../components/FormFieldEditor';
 
 export default function ViewTemplate() {
   const { templateId } = useLocalSearchParams();
-  const { templates } = useFormContext();
+  const { templates, updateTemplate } = useFormContext();
   const router = useRouter();
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedTemplate, setEditedTemplate] = useState(null);
 
   const template = templates.find(t => t.templateId === templateId);
+
+  const handleSave = async () => {
+    try {
+      await updateTemplate(templateId, editedTemplate);
+      Alert.alert('Success', 'Template updated successfully');
+      setIsEditing(false);
+    } catch (error) {
+      Alert.alert('Error', 'Failed to update template');
+    }
+  };
 
   if (!template) {
     return (
@@ -29,15 +42,48 @@ export default function ViewTemplate() {
           <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
         <Text style={styles.title}>{template.name}</Text>
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => {
+            if (isEditing) {
+              handleSave();
+            } else {
+              setEditedTemplate({...template});
+              setIsEditing(true);
+            }
+          }}
+        >
+          <Ionicons 
+            name={isEditing ? "save-outline" : "create-outline"} 
+            size={24} 
+            color="#000" 
+          />
+        </TouchableOpacity>
       </View>
 
       <ScrollView style={styles.scrollView}>
         {template.fields.map((field, index) => (
-          <View key={field.id} style={styles.fieldCard}>
-            <Text style={styles.fieldNumber}>Question {index + 1}</Text>
-            <Text style={styles.fieldLabel}>{field.label}</Text>
-            <Text style={styles.fieldType}>Type: {field.type}</Text>
-          </View>
+          isEditing ? (
+            <FormFieldEditor
+              key={field.id}
+              field={field}
+              onUpdate={(fieldId, updatedField) => {
+                const newFields = [...editedTemplate.fields];
+                const fieldIndex = newFields.findIndex(f => f.id === fieldId);
+                newFields[fieldIndex] = updatedField;
+                setEditedTemplate({...editedTemplate, fields: newFields});
+              }}
+            />
+          ) : (
+            <View key={field.id} style={styles.fieldCard}>
+              <Text style={styles.fieldNumber}>Question {index + 1}</Text>
+              <Text style={styles.fieldLabel}>{field.question}</Text>
+              <Text style={styles.fieldType}>Type: {field.type}</Text>
+              {field.required && (
+                <Text style={styles.requiredBadge}>Required</Text>
+              )}
+            </View>
+          )
         ))}
       </ScrollView>
     </View>
@@ -58,6 +104,10 @@ const styles = StyleSheet.create({
   },
   backButton: {
     marginRight: 16,
+  },
+  editButton: {
+    marginLeft: 'auto',
+    padding: 8,
   },
   title: {
     fontFamily: 'outfit-medium',
@@ -90,4 +140,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666666',
   },
+  requiredBadge: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: '#FF0000',
+    color: '#FFFFFF',
+    padding: 4,
+    borderRadius: 4,
+    fontSize: 12,
+    fontFamily: 'outfit-medium',
+  }
 }); 

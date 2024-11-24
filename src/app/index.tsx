@@ -42,7 +42,7 @@ export default function Index() {
 
   return (
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      {user ? <Redirect href="/(tabs)/savedForms" /> : <Login />}
+      {user ? <Redirect href="/(tabs)/templates" /> : <Login />}
     </View>
   );
 }

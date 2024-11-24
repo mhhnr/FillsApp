@@ -65,13 +65,24 @@ export function FormProvider({ children }) {
     }
   }, [clearData]);
 
+  const updateTemplate = async (templateId, updatedTemplate) => {
+    try {
+      await templateService.updateTemplate(templateId, updatedTemplate);
+      await loadData(); // Reload the data after update
+    } catch (error) {
+      console.error('Error updating template:', error);
+      throw error;
+    }
+  };
+
   const value = {
     templates: state.templates,
     filledForms: state.filledForms,
     error: state.error,
     loading,
     loadData,
-    clearData
+    clearData,
+    updateTemplate,
   };
 
   return <FormContext.Provider value={value}>{children}</FormContext.Provider>;
