@@ -1,57 +1,31 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
-import { useFormContext } from '../../contexts/FormContext';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import MedicalFormTemplate from '../../components/Templates/MedicalFormTemplate';
 
 export default function Templates() {
-  const { templates, deleteTemplate, loading } = useFormContext();
   const router = useRouter();
 
-  const handleAddTemplate = () => {
-    router.push('/makeForm');
-  };
-
-  const handleTemplateSelect = (template) => {
-    router.push({
-      pathname: '/viewTemplate',
-      params: { templateId: template.templateId }
-    });
+  const handleFillForm = () => {
+    router.push('/fillForm');
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Templates</Text>
-        <TouchableOpacity 
-          style={styles.addButton}
-          onPress={handleAddTemplate}
-        >
-          <Ionicons name="add-circle-outline" size={28} color="#000" />
-        </TouchableOpacity>
+        <Text style={styles.title}>Medical Form Template</Text>
       </View>
 
-      <ScrollView style={styles.scrollView}>
-        {templates.length === 0 ? (
-          <Text style={styles.emptyText}>No templates yet</Text>
-        ) : (
-          templates.map((template) => (
-            <TouchableOpacity 
-              key={template.templateId} 
-              style={styles.templateCard}
-              onPress={() => handleTemplateSelect(template)}
-            >
-              <View style={styles.templateInfo}>
-                <Text style={styles.templateTitle}>{template.title}</Text>
-                <Text style={styles.fieldCount}>
-                  {template.fields?.length || 0} fields
-                </Text>
-              </View>
-              <Ionicons name="chevron-forward" size={24} color="#000" />
-            </TouchableOpacity>
-          ))
-        )}
-      </ScrollView>
+      <MedicalFormTemplate isTemplate={true} />
+
+      <TouchableOpacity 
+        style={styles.fillButton}
+        onPress={handleFillForm}
+      >
+        <Ionicons name="create-outline" size={24} color="#FFFFFF" />
+        <Text style={styles.fillButtonText}>Fill New Form</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -60,53 +34,30 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    padding: 16,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
   },
   title: {
     fontFamily: 'outfit-medium',
     fontSize: 24,
   },
-  addButton: {
-    padding: 8,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  emptyText: {
-    fontFamily: 'outfit-regular',
-    fontSize: 16,
-    color: '#666666',
-    textAlign: 'center',
-    marginTop: 20,
-  },
-  templateCard: {
+  fillButton: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    backgroundColor: '#000000',
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: '#FFFFFF',
     borderRadius: 12,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
+    gap: 8,
   },
-  templateInfo: {
-    flex: 1,
-  },
-  templateTitle: {
+  fillButtonText: {
     fontFamily: 'outfit-medium',
-    fontSize: 18,
-    color: '#000000',
-    marginBottom: 4,
-  },
-  fieldCount: {
-    fontFamily: 'outfit-regular',
-    fontSize: 14,
-    color: '#666666',
-  },
+    fontSize: 16,
+    color: '#FFFFFF',
+  }
 }); 
