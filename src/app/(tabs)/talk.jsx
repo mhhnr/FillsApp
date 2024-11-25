@@ -1,12 +1,16 @@
-import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Pressable, Animated as RNAnimated, ScrollView } from 'react-native'
+import React, { useState, useEffect, useRef } from 'react'
 import Animated, { 
   useAnimatedStyle, 
   withSpring,
   withRepeat,
   withSequence,
+  withTiming,
+  runOnJS,
 } from 'react-native-reanimated'
 import { Audio } from 'expo-av'
+import { Ionicons } from '@expo/vector-icons'
+import { PanGestureHandler, State } from 'react-native-gesture-handler'
 
 // Import Voice conditionally
 let Voice;
@@ -18,84 +22,150 @@ try {
 
 export default function Talk() {
   const [isRecording, setIsRecording] = useState(false)
+  const [isLocked, setIsLocked] = useState(false)
   const [recording, setRecording] = useState(null)
-  const [transcribedText, setTranscribedText] = useState('')
-  const [isListening, setIsListening] = useState(false);
+  const [message, setMessage] = useState('')
+  const [selectedTexts, setSelectedTexts] = useState([])
+  const [transcribedTexts, setTranscribedTexts] = useState([])
+  const [isSelectionMode, setIsSelectionMode] = useState(false)
+
+  // Add ref for scrolling
+  const scrollViewRef = useRef(null)
+
+  // Add this function to scroll to bottom whenever messages change
+  useEffect(() => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollToEnd({ animated: true })
+    }
+  }, [transcribedTexts]) // Scroll whenever transcribed texts change
 
   const pulseStyle = useAnimatedStyle(() => {
     if (!isRecording) return { transform: [{ scale: 1 }] }
     return {
-      transform: [
-        {
-          scale: withRepeat(
-            withSequence(
-              withSpring(1.2),
-              withSpring(1)
-            ),
-            -1,
-            true
+      transform: [{
+        scale: withRepeat(
+          withSequence(
+            withSpring(1.2),
+            withSpring(1)
           ),
-        },
-      ],
+          -1,
+          true
+        ),
+      }],
     }
   })
 
+  const handlePressIn = async () => {
+    if (!isRecording) {
+      await startRecording()
+    }
+  }
+
+  const handlePressOut = async () => {
+    if (isRecording && !isLocked) {
+      await stopRecording()
+    }
+  }
+
+  const toggleLock = async () => {
+    if (isLocked) {
+      // If we're unlocking, stop the recording
+      setIsLocked(false)
+      await stopRecording()
+    } else {
+      // If we're locking, just update the lock state
+      setIsLocked(true)
+    }
+  }
+
   async function startRecording() {
     try {
+      // Clean up any existing recording first
       if (recording) {
-        console.log('Recording already exists, cleaning up...')
-        await recording.stopAndUnloadAsync()
+        await recording.stopAndUnloadAsync().catch(() => {/* ignore cleanup errors */})
       }
 
-      console.log('Requesting permissions...')
+      // Ensure permissions are granted
       const { status } = await Audio.requestPermissionsAsync()
       if (status !== 'granted') {
-        console.log('Permission not granted!')
+        Alert.alert('Permission required', 'Please grant microphone access to record audio.')
         return
       }
 
+      // Set up audio mode
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: true,
         playsInSilentModeIOS: true,
       })
 
-      console.log('Starting recording...')
+      // Create new recording instance
       const newRecording = new Audio.Recording()
       await newRecording.prepareToRecordAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY)
       await newRecording.startAsync()
+      
       setRecording(newRecording)
       setIsRecording(true)
     } catch (err) {
       console.error('Failed to start recording', err)
-      setIsRecording(false)
       setRecording(null)
+      setIsRecording(false)
     }
   }
 
   async function stopRecording() {
     try {
-      if (!recording) {
-        console.log('No recording to stop')
-        setIsRecording(false)
-        return
-      }
-
-      console.log('Stopping recording...')
+      if (!recording) return
+      
+      setIsRecording(false)
+      setIsLocked(false)
+      
       await recording.stopAndUnloadAsync()
       const uri = recording.getURI()
-      console.log('Recording stopped and stored at', uri)
       
-      setTranscribedText('Your speech will be transcribed here...')
+      // Here you would integrate with Amazon Transcribe
+      const placeholderText = "This is a transcribed text from Amazon Transcribe"
+      setTranscribedTexts([...transcribedTexts, placeholderText])
       
       setRecording(null)
-      setIsRecording(false)
     } catch (err) {
       console.error('Failed to stop recording', err)
-      setIsRecording(false)
+      // Clean up state even if there's an error
       setRecording(null)
+      setIsRecording(false)
+      setIsLocked(false)
     }
   }
 
+  const handleTextSelection = (index) => {
+    if (!isSelectionMode) return
+    
+    const newSelection = [...selectedTexts]
+    const textIndex = newSelection.indexOf(index)
+    
+    if (textIndex === -1) {
+      newSelection.push(index)
+    } else {
+      newSelection.splice(textIndex, 1)
+    }
+    
+    setSelectedTexts(newSelection)
+  }
+
+  const handleSubmit = () => {
+    // Here you would integrate with Amazon Polly and Lambda
+    console.log('Selected texts:', selectedTexts.map(index => transcribedTexts[index]))
+    setSelectedTexts([])
+    setIsSelectionMode(false)
+  }
+
+  const sendMessage = () => {
+    if (message.trim()) {
+      setTranscribedTexts([...transcribedTexts, message])
+      setMessage('')
+    }
+  }
+
+  // Add cleanup on component unmount
   useEffect(() => {
     return () => {
       if (recording) {
@@ -104,91 +174,64 @@ export default function Talk() {
     }
   }, [recording])
 
-  useEffect(() => {
-    // Only set up listeners if Voice is available
-    if (Voice) {
-      Voice.onSpeechStart = onSpeechStart;
-      Voice.onSpeechResults = onSpeechResults;
-      Voice.onSpeechError = onSpeechError;
-
-      return () => {
-        Voice?.destroy().then(Voice?.removeAllListeners);
-      };
-    }
-  }, []);
-
-  const onSpeechStart = () => {
-    console.log('Speech started');
-  };
-
-  const onSpeechResults = (e) => {
-    if (e?.value) {
-      const text = e.value[0];
-      console.log('Speech result:', text);
-      setTranscribedText(text);
-    }
-  };
-
-  const onSpeechError = (e) => {
-    console.error('Speech error:', e);
-  };
-
-  const startListening = async () => {
-    try {
-      await Voice.start('en-US'); // or your preferred language
-      setIsListening(true);
-    } catch (e) {
-      console.error('Error starting voice:', e);
-    }
-  };
-
-  const stopListening = async () => {
-    try {
-      await Voice.stop();
-      setIsListening(false);
-    } catch (e) {
-      console.error('Error stopping voice:', e);
-    }
-  };
-
   return (
     <View style={styles.container}>
-      <View style={styles.transcriptionContainer}>
+      <ScrollView 
+        ref={scrollViewRef}
+        style={styles.messagesContainer}
+        contentContainerStyle={styles.messagesContent}
+        showsVerticalScrollIndicator={true}
+      >
+        {transcribedTexts.map((text, index) => (
+          <View key={index} style={styles.messageContainer}>
+            <Text style={styles.messageText}>{text}</Text>
+          </View>
+        ))}
+      </ScrollView>
+
+      <View style={styles.inputContainer}>
         <TextInput
-          style={styles.transcriptionText}
-          value={transcribedText}
-          onChangeText={setTranscribedText}
+          style={styles.input}
+          value={message}
+          onChangeText={setMessage}
+          placeholder="Type a message"
           multiline
-          placeholder="Your speech will appear here..."
-          placeholderTextColor="#666666"
         />
-      </View>
-
-      <View style={styles.controlsContainer}>
-        <Animated.View style={[styles.recordButtonContainer, pulseStyle]}>
-          <TouchableOpacity
-            style={[
-              styles.recordButton,
-              isRecording && styles.recordButtonActive
-            ]}
-            onPress={isRecording ? stopRecording : startRecording}
-          >
-            <View style={[
-              styles.recordButtonInner,
-              isRecording && styles.recordButtonInnerActive
-            ]} />
-          </TouchableOpacity>
-        </Animated.View>
-
-        {transcribedText && (
+        {message.length > 0 ? (
           <TouchableOpacity 
-            style={styles.submitButton}
-            onPress={() => {
-              console.log('Submitting:', transcribedText)
-            }}
+            style={styles.sendButton}
+            onPress={sendMessage}
           >
-            <Text style={styles.submitButtonText}>Submit</Text>
+            <Ionicons name="send" size={24} color="#007AFF" />
           </TouchableOpacity>
+        ) : (
+          <View style={styles.recordControls}>
+            {isRecording && (
+              <TouchableOpacity
+                style={[styles.lockButton, isLocked && styles.lockButtonActive]}
+                onPress={toggleLock}
+              >
+                <Ionicons 
+                  name={isLocked ? "lock-closed" : "lock-open"} 
+                  size={20} 
+                  color="#007AFF" 
+                />
+              </TouchableOpacity>
+            )}
+            <Animated.View style={[styles.recordButtonContainer, pulseStyle]}>
+              <TouchableOpacity
+                style={[styles.recordButton, isRecording && styles.recordButtonActive]}
+                onPressIn={handlePressIn}
+                onPressOut={handlePressOut}
+              >
+                <Ionicons 
+                  name={isRecording ? "mic" : "mic-outline"} 
+                  size={24} 
+                  color={isRecording ? "#FF0000" : "#007AFF"} 
+                />
+              </TouchableOpacity>
+            </Animated.View>
+          </View>
         )}
       </View>
     </View>
@@ -198,73 +241,115 @@ export default function Talk() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-    padding: 20,
+    backgroundColor: '#fff',
   },
-  transcriptionContainer: {
+  messagesContainer: {
     flex: 1,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
+    width: '100%',
+  },
+  messagesContent: {
     padding: 16,
-    marginBottom: 20,
-    marginTop: 40,
+    paddingBottom: 80, // Add some bottom padding to prevent last message from being hidden
   },
-  transcriptionText: {
-    fontFamily: 'outfit-medium',
+  messageContainer: {
+    backgroundColor: '#FFFFFF',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+    maxWidth: '80%',
+    alignSelf: 'flex-end',
+  },
+  messageText: {
     fontSize: 16,
-    color: '#333333',
-    flex: 1,
-    textAlignVertical: 'top',
+    color: '#000000',
   },
-  controlsContainer: {
+  inputContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
-    paddingBottom: 40,
+    padding: 8,
+    backgroundColor: '#FFFFFF',
+    borderTopWidth: 1,
+    borderTopColor: '#E0E0E0',
+  },
+  input: {
+    flex: 1,
+    backgroundColor: '#F5F5F5',
+    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    marginRight: 8,
+    maxHeight: 100,
   },
   recordButtonContainer: {
-    marginBottom: 20,
-  },
-  recordButton: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#FFFFFF',
-    borderWidth: 2,
-    borderColor: '#000000',
+    width: 40,
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 3,
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
   },
-  recordButtonActive: {
-    borderColor: '#FF0000',
-  },
-  recordButtonInner: {
+  recordButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#000000',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  recordButtonInnerActive: {
-    backgroundColor: '#FF0000',
+  recordButtonActive: {
+    backgroundColor: '#FFE0E0',
+  },
+  sendButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   submitButton: {
-    paddingHorizontal: 30,
-    paddingVertical: 12,
-    backgroundColor: '#000000',
-    borderRadius: 25,
-    elevation: 2,
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
+    backgroundColor: '#007AFF',
+    padding: 12,
+    borderRadius: 8,
+    margin: 16,
   },
   submitButtonText: {
     color: '#FFFFFF',
-    fontFamily: 'outfit-medium',
     fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  recordingIndicator: {
+    position: 'absolute',
+    bottom: 80,
+    right: 0,
+    width: 150,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    padding: 16,
+    alignItems: 'center',
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
+  },
+  recordingText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontFamily: 'outfit-medium',
+    marginBottom: 4,
+  },
+  recordingSubText: {
+    color: '#CCCCCC',
+    fontSize: 14,
+    fontFamily: 'outfit-regular',
+  },
+  recordControls: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  lockButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5F5F5',
+  },
+  lockButtonActive: {
+    backgroundColor: '#FFE0E0',
   },
 })
