@@ -4,20 +4,38 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { getTemplateIcon } from '../../utils/templateUtils';
 import { getTemplateDetails } from '../../components/templates';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Update the store to properly handle form data
+// Update the store to properly handle form data and persistence
 export const filledFormsStore = {
   forms: [],
-  addForm: function(form) {
-    this.forms.push({
+  
+  async init() {
+    try {
+      const savedForms = await AsyncStorage.getItem('filledForms');
+      if (savedForms) {
+        this.forms = JSON.parse(savedForms);
+      }
+    } catch (error) {
+      console.error('Error loading forms:', error);
+    }
+  },
+
+  async addForm(form) {
+    const newForm = {
       id: Date.now().toString(),
       createdAt: new Date().toISOString(),
       templateId: form.templateId,
-      data: form.responses, // Store the actual form data
+      data: form.responses,
       title: form.title
-    });
+    };
+    
+    this.forms.push(newForm);
+    await this._saveForms();
+    return newForm;
   },
-  updateForm: function(formId, updatedData) {
+
+  async updateForm(formId, updatedData) {
     const index = this.forms.findIndex(form => form.id === formId);
     if (index !== -1) {
       this.forms[index] = {
@@ -25,16 +43,29 @@ export const filledFormsStore = {
         data: updatedData.responses,
         updatedAt: new Date().toISOString()
       };
+      await this._saveForms();
     }
   },
-  deleteForm: function(formId) {
+
+  async deleteForm(formId) {
     this.forms = this.forms.filter(form => form.id !== formId);
+    await this._saveForms();
   },
-  getForms: function() {
+
+  getForms() {
     return this.forms;
   },
-  getFormById: function(formId) {
+
+  getFormById(formId) {
     return this.forms.find(form => form.id === formId);
+  },
+
+  async _saveForms() {
+    try {
+      await AsyncStorage.setItem('filledForms', JSON.stringify(this.forms));
+    } catch (error) {
+      console.error('Error saving forms:', error);
+    }
   }
 };
 
@@ -42,6 +73,10 @@ export default function Forms() {
   const router = useRouter();
   const [forms, setForms] = useState([]);
   const [selectedForm, setSelectedForm] = useState(null);
+
+  useEffect(() => {
+    filledFormsStore.init();
+  }, []);
 
   useEffect(() => {
     setForms(filledFormsStore.getForms());

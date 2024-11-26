@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, TextInput, ScrollView, StyleSheet } from 'react-native';
 
-export default function GeneralMedicalTemplate({ isTemplate = true, data = {}, onDataChange }) {
+export default function GeneralMedicalTemplate({ isTemplate = true, data = {}, onDataChange, readOnly = false }) {
   const handleChange = (field, value) => {
-    if (!isTemplate && onDataChange) {
+    if (!isTemplate && !readOnly && onDataChange) {
       onDataChange({
         ...data,
         [field]: value
@@ -26,8 +26,8 @@ export default function GeneralMedicalTemplate({ isTemplate = true, data = {}, o
           <View style={styles.field}>
             <Text style={styles.label}>Full Name:</Text>
             <TextInput 
-              style={styles.input}
-              editable={!isTemplate}
+              style={[styles.input, readOnly && styles.readOnlyInput]}
+              editable={!isTemplate && !readOnly}
               value={data.fullName}
               placeholder="Patient's full name"
               onChangeText={(value) => handleChange('fullName', value)}
@@ -39,8 +39,8 @@ export default function GeneralMedicalTemplate({ isTemplate = true, data = {}, o
           <View style={styles.field}>
             <Text style={styles.label}>Age:</Text>
             <TextInput 
-              style={styles.input}
-              editable={!isTemplate}
+              style={[styles.input, readOnly && styles.readOnlyInput]}
+              editable={!isTemplate && !readOnly}
               value={data.age}
               placeholder="Age"
               keyboardType="numeric"
@@ -50,8 +50,8 @@ export default function GeneralMedicalTemplate({ isTemplate = true, data = {}, o
           <View style={styles.field}>
             <Text style={styles.label}>Gender:</Text>
             <TextInput 
-              style={styles.input}
-              editable={!isTemplate}
+              style={[styles.input, readOnly && styles.readOnlyInput]}
+              editable={!isTemplate && !readOnly}
               value={data.gender}
               placeholder="Gender"
               onChangeText={(value) => handleChange('gender', value)}
@@ -63,8 +63,8 @@ export default function GeneralMedicalTemplate({ isTemplate = true, data = {}, o
           <View style={styles.field}>
             <Text style={styles.label}>Blood Pressure:</Text>
             <TextInput 
-              style={styles.input}
-              editable={!isTemplate}
+              style={[styles.input, readOnly && styles.readOnlyInput]}
+              editable={!isTemplate && !readOnly}
               value={data.bloodPressure}
               placeholder="BP"
               onChangeText={(value) => handleChange('bloodPressure', value)}
@@ -73,8 +73,8 @@ export default function GeneralMedicalTemplate({ isTemplate = true, data = {}, o
           <View style={styles.field}>
             <Text style={styles.label}>Temperature:</Text>
             <TextInput 
-              style={styles.input}
-              editable={!isTemplate}
+              style={[styles.input, readOnly && styles.readOnlyInput]}
+              editable={!isTemplate && !readOnly}
               value={data.temperature}
               placeholder="°F"
               onChangeText={(value) => handleChange('temperature', value)}
@@ -88,8 +88,8 @@ export default function GeneralMedicalTemplate({ isTemplate = true, data = {}, o
         <View style={styles.field}>
           <Text style={styles.label}>Present Complaints:</Text>
           <TextInput 
-            style={[styles.input, styles.textArea]}
-            editable={!isTemplate}
+            style={[styles.input, readOnly && styles.readOnlyInput, styles.textArea]}
+            editable={!isTemplate && !readOnly}
             value={data.complaints}
             placeholder="Describe current symptoms"
             multiline
@@ -160,5 +160,9 @@ const styles = StyleSheet.create({
   textArea: {
     height: 100,
     textAlignVertical: 'top',
-  }
+  },
+  readOnlyInput: {
+    backgroundColor: '#F5F5F5',
+    color: '#000000',
+  },
 });

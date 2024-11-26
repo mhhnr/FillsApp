@@ -1,7 +1,16 @@
 import React from 'react';
 import { View, Text, TextInput, ScrollView, StyleSheet } from 'react-native';
 
-export default function PediatricTemplate({ isTemplate = true, data = {} }) {
+export default function PediatricTemplate({ isTemplate = true, data = {}, onDataChange, readOnly = false }) {
+  const handleChange = (field, value) => {
+    if (!isTemplate && !readOnly && onDataChange) {
+      onDataChange({
+        ...data,
+        [field]: value
+      });
+    }
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -17,10 +26,11 @@ export default function PediatricTemplate({ isTemplate = true, data = {} }) {
           <View style={styles.field}>
             <Text style={styles.label}>Child's Name:</Text>
             <TextInput 
-              style={styles.input}
-              editable={!isTemplate}
+              style={[styles.input, readOnly && styles.readOnlyInput]}
+              editable={!isTemplate && !readOnly}
               value={data.childName}
               placeholder="Child's full name"
+              onChangeText={(value) => handleChange('childName', value)}
             />
           </View>
         </View>
@@ -29,19 +39,21 @@ export default function PediatricTemplate({ isTemplate = true, data = {} }) {
           <View style={styles.field}>
             <Text style={styles.label}>Age:</Text>
             <TextInput 
-              style={styles.input}
-              editable={!isTemplate}
+              style={[styles.input, readOnly && styles.readOnlyInput]}
+              editable={!isTemplate && !readOnly}
               value={data.age}
               placeholder="Years/Months"
+              onChangeText={(value) => handleChange('age', value)}
             />
           </View>
           <View style={styles.field}>
             <Text style={styles.label}>Date of Birth:</Text>
             <TextInput 
-              style={styles.input}
-              editable={!isTemplate}
+              style={[styles.input, readOnly && styles.readOnlyInput]}
+              editable={!isTemplate && !readOnly}
               value={data.dob}
               placeholder="DD/MM/YYYY"
+              onChangeText={(value) => handleChange('dob', value)}
             />
           </View>
         </View>
@@ -53,47 +65,35 @@ export default function PediatricTemplate({ isTemplate = true, data = {} }) {
           <View style={styles.field}>
             <Text style={styles.label}>Weight:</Text>
             <TextInput 
-              style={styles.input}
-              editable={!isTemplate}
+              style={[styles.input, readOnly && styles.readOnlyInput]}
+              editable={!isTemplate && !readOnly}
               value={data.weight}
               placeholder="kg"
+              onChangeText={(value) => handleChange('weight', value)}
             />
           </View>
           <View style={styles.field}>
             <Text style={styles.label}>Height:</Text>
             <TextInput 
-              style={styles.input}
-              editable={!isTemplate}
+              style={[styles.input, readOnly && styles.readOnlyInput]}
+              editable={!isTemplate && !readOnly}
               value={data.height}
               placeholder="cm"
+              onChangeText={(value) => handleChange('height', value)}
             />
           </View>
         </View>
 
-        <View style={styles.row}>
-          <View style={styles.field}>
-            <Text style={styles.label}>Head Circumference:</Text>
-            <TextInput 
-              style={styles.input}
-              editable={!isTemplate}
-              value={data.headCircumference}
-              placeholder="cm"
-            />
-          </View>
-        </View>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Development Milestones</Text>
         <View style={styles.field}>
-          <Text style={styles.label}>Current Milestones:</Text>
+          <Text style={styles.label}>Development Milestones:</Text>
           <TextInput 
-            style={[styles.input, styles.textArea]}
-            editable={!isTemplate}
+            style={[styles.input, styles.textArea, readOnly && styles.readOnlyInput]}
+            editable={!isTemplate && !readOnly}
             value={data.milestones}
             placeholder="Note developmental progress"
             multiline
             numberOfLines={4}
+            onChangeText={(value) => handleChange('milestones', value)}
           />
         </View>
       </View>
@@ -162,5 +162,9 @@ const styles = StyleSheet.create({
   textArea: {
     height: 100,
     textAlignVertical: 'top',
+  },
+  readOnlyInput: {
+    backgroundColor: '#F5F5F5',
+    color: '#000000',
   }
 });

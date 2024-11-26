@@ -22,14 +22,8 @@ export default function FillForm() {
   const TemplateComponent = getTemplateComponent(templateId);
   const templateDetails = getTemplateDetails(templateId);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     try {
-      // Make sure we have data to save
-      if (Object.keys(formData).length === 0) {
-        Alert.alert('Error', 'Please fill in the form before saving');
-        return;
-      }
-
       const filledForm = {
         templateId,
         responses: formData,
@@ -37,9 +31,9 @@ export default function FillForm() {
       };
 
       if (isEditing && formId) {
-        filledFormsStore.updateForm(formId, filledForm);
+        await filledFormsStore.updateForm(formId, filledForm);
       } else {
-        filledFormsStore.addForm(filledForm);
+        await filledFormsStore.addForm(filledForm);
       }
 
       Alert.alert(

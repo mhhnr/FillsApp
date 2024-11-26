@@ -1,7 +1,16 @@
 import React from 'react';
 import { View, Text, TextInput, ScrollView, StyleSheet } from 'react-native';
 
-export default function EmergencyTemplate({ isTemplate = true, data = {} }) {
+export default function EmergencyTemplate({ isTemplate = true, data = {}, onDataChange, readOnly = false }) {
+  const handleChange = (field, value) => {
+    if (!isTemplate && !readOnly && onDataChange) {
+      onDataChange({
+        ...data,
+        [field]: value
+      });
+    }
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -17,20 +26,22 @@ export default function EmergencyTemplate({ isTemplate = true, data = {} }) {
           <View style={styles.field}>
             <Text style={styles.label}>Triage Level (1-5):</Text>
             <TextInput 
-              style={styles.input}
-              editable={!isTemplate}
+              style={[styles.input, readOnly && styles.readOnlyInput]}
+              editable={!isTemplate && !readOnly}
               value={data.triageLevel}
               placeholder="Triage Level"
               keyboardType="numeric"
+              onChangeText={(value) => handleChange('triageLevel', value)}
             />
           </View>
           <View style={styles.field}>
             <Text style={styles.label}>Arrival Time:</Text>
             <TextInput 
-              style={styles.input}
-              editable={!isTemplate}
+              style={[styles.input, readOnly && styles.readOnlyInput]}
+              editable={!isTemplate && !readOnly}
               value={data.arrivalTime}
               placeholder="HH:MM"
+              onChangeText={(value) => handleChange('arrivalTime', value)}
             />
           </View>
         </View>
@@ -42,19 +53,21 @@ export default function EmergencyTemplate({ isTemplate = true, data = {} }) {
           <View style={styles.field}>
             <Text style={styles.label}>Blood Pressure:</Text>
             <TextInput 
-              style={styles.input}
-              editable={!isTemplate}
+              style={[styles.input, readOnly && styles.readOnlyInput]}
+              editable={!isTemplate && !readOnly}
               value={data.bp}
               placeholder="mmHg"
+              onChangeText={(value) => handleChange('bp', value)}
             />
           </View>
           <View style={styles.field}>
             <Text style={styles.label}>Heart Rate:</Text>
             <TextInput 
-              style={styles.input}
-              editable={!isTemplate}
+              style={[styles.input, readOnly && styles.readOnlyInput]}
+              editable={!isTemplate && !readOnly}
               value={data.heartRate}
               placeholder="BPM"
+              onChangeText={(value) => handleChange('heartRate', value)}
             />
           </View>
         </View>
@@ -63,34 +76,36 @@ export default function EmergencyTemplate({ isTemplate = true, data = {} }) {
           <View style={styles.field}>
             <Text style={styles.label}>Oxygen Saturation:</Text>
             <TextInput 
-              style={styles.input}
-              editable={!isTemplate}
+              style={[styles.input, readOnly && styles.readOnlyInput]}
+              editable={!isTemplate && !readOnly}
               value={data.o2sat}
               placeholder="%"
+              onChangeText={(value) => handleChange('o2sat', value)}
             />
           </View>
           <View style={styles.field}>
             <Text style={styles.label}>GCS Score:</Text>
             <TextInput 
-              style={styles.input}
-              editable={!isTemplate}
+              style={[styles.input, readOnly && styles.readOnlyInput]}
+              editable={!isTemplate && !readOnly}
               value={data.gcs}
               placeholder="3-15"
+              keyboardType="numeric"
+              onChangeText={(value) => handleChange('gcs', value)}
             />
           </View>
         </View>
-      </View>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Chief Complaint</Text>
         <View style={styles.field}>
+          <Text style={styles.label}>Chief Complaint:</Text>
           <TextInput 
-            style={[styles.input, styles.textArea]}
-            editable={!isTemplate}
+            style={[styles.input, styles.textArea, readOnly && styles.readOnlyInput]}
+            editable={!isTemplate && !readOnly}
             value={data.complaint}
             placeholder="Describe emergency condition"
             multiline
             numberOfLines={4}
+            onChangeText={(value) => handleChange('complaint', value)}
           />
         </View>
       </View>
@@ -159,5 +174,9 @@ const styles = StyleSheet.create({
   textArea: {
     height: 100,
     textAlignVertical: 'top',
+  },
+  readOnlyInput: {
+    backgroundColor: '#F5F5F5',
+    color: '#000000',
   }
 });
