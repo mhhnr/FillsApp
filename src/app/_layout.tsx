@@ -16,11 +16,16 @@ export default function RootLayout() {
           }} 
         />
         <Stack.Screen 
-          name="makeForm" 
+          name="fillForm" 
           options={{ 
-            presentation: 'modal',
-            title: 'Create Template',
-            headerShown: true
+            headerShown: true,
+            title: 'Fill Form'
+          }} 
+        />
+        <Stack.Screen 
+          name="viewFilledForm" 
+          options={{ 
+            headerShown: false
           }} 
         />
       </Stack>

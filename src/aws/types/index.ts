@@ -1,9 +1,11 @@
 export interface Template {
     templateId: string;
-    userId: string;
     title: string;
     description?: string;
-    fields: Field[];
+    type: 'general' | 'pediatric' | 'dental' | 'emergency';
+    templateCode: string;
+    version: number;
+    isActive: boolean;
     createdAt: string;
     updatedAt?: string;
   }

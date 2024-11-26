@@ -1,70 +1,137 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { useFormContext } from '../../contexts/FormContext';
+import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { getTemplateIcon } from '../../utils/templateUtils';
+import { getTemplateDetails } from '../../components/templates';
 
-export default function FilledForms() {
-  const { filledForms, templates, deleteFilledForm, loading } = useFormContext();
+// Update the store to properly handle form data
+export const filledFormsStore = {
+  forms: [],
+  addForm: function(form) {
+    this.forms.push({
+      id: Date.now().toString(),
+      createdAt: new Date().toISOString(),
+      templateId: form.templateId,
+      data: form.responses, // Store the actual form data
+      title: form.title
+    });
+  },
+  updateForm: function(formId, updatedData) {
+    const index = this.forms.findIndex(form => form.id === formId);
+    if (index !== -1) {
+      this.forms[index] = {
+        ...this.forms[index],
+        data: updatedData.responses,
+        updatedAt: new Date().toISOString()
+      };
+    }
+  },
+  deleteForm: function(formId) {
+    this.forms = this.forms.filter(form => form.id !== formId);
+  },
+  getForms: function() {
+    return this.forms;
+  },
+  getFormById: function(formId) {
+    return this.forms.find(form => form.id === formId);
+  }
+};
 
-  const handleDelete = async (formId) => {
+export default function Forms() {
+  const router = useRouter();
+  const [forms, setForms] = useState([]);
+  const [selectedForm, setSelectedForm] = useState(null);
+
+  useEffect(() => {
+    setForms(filledFormsStore.getForms());
+  }, []);
+
+  const handleEditForm = (form) => {
+    router.push({
+      pathname: '/fillForm',
+      params: { 
+        templateId: form.templateId,
+        formId: form.id,
+        isEditing: true
+      }
+    });
+  };
+
+  const handleDeleteForm = (formId) => {
     Alert.alert(
       'Delete Form',
-      'Are you sure you want to delete this filled form?',
+      'Are you sure you want to delete this form?',
       [
-        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Cancel',
+          style: 'cancel'
+        },
         {
           text: 'Delete',
           style: 'destructive',
-          onPress: async () => {
-            try {
-              await deleteFilledForm(formId);
-              Alert.alert('Success', 'Form deleted successfully');
-            } catch (error) {
-              Alert.alert('Error', error.message || 'Failed to delete form');
-            }
-          },
-        },
+          onPress: () => {
+            filledFormsStore.deleteForm(formId);
+            setForms(filledFormsStore.getForms());
+          }
+        }
       ]
     );
   };
 
-  const getTemplateTitle = (templateId) => {
-    const template = templates.find(t => t.templateId === templateId);
-    return template?.title || 'Unknown Template';
-  };
-
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Filled Forms</Text>
-        <Text style={styles.emptyText}>Loading...</Text>
-      </View>
-    );
-  }
+  const renderFormActions = (form) => (
+    <View style={styles.formActions}>
+      <TouchableOpacity 
+        style={styles.actionButton}
+        onPress={() => handleEditForm(form)}
+      >
+        <Ionicons name="create-outline" size={20} color="#007AFF" />
+      </TouchableOpacity>
+      <TouchableOpacity 
+        style={styles.actionButton}
+        onPress={() => handleDeleteForm(form.id)}
+      >
+        <Ionicons name="trash-outline" size={20} color="#FF3B30" />
+      </TouchableOpacity>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Filled Forms</Text>
       <ScrollView style={styles.scrollView}>
-        {filledForms.length === 0 ? (
+        {forms.length === 0 ? (
           <Text style={styles.emptyText}>No filled forms yet</Text>
         ) : (
-          filledForms.map((form) => (
-            <View key={form.formId} style={styles.formCard}>
-              <View style={styles.formInfo}>
-                <Text style={styles.formTitle}>{getTemplateTitle(form.templateId)}</Text>
-                <Text style={styles.formDate}>
-                  Filled: {new Date(form.createdAt).toLocaleDateString()}
-                </Text>
+          forms.map((form) => {
+            const templateDetails = getTemplateDetails(form.templateId);
+            return (
+              <View key={form.id} style={styles.formCard}>
+                <TouchableOpacity
+                  style={styles.formContent}
+                  onPress={() => router.push({
+                    pathname: '/viewFilledForm',
+                    params: { formId: form.id }
+                  })}
+                >
+                  <View style={styles.iconContainer}>
+                    <Ionicons 
+                      name={getTemplateIcon(templateDetails.type)} 
+                      size={24} 
+                      color="#007AFF" 
+                    />
+                  </View>
+                  <View style={styles.formInfo}>
+                    <Text style={styles.formTitle}>{templateDetails.title}</Text>
+                    <Text style={styles.formDate}>
+                      {form.updatedAt ? 'Updated: ' : 'Filled: '}
+                      {new Date(form.updatedAt || form.createdAt).toLocaleDateString()}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                {renderFormActions(form)}
               </View>
-              <TouchableOpacity 
-                style={styles.deleteButton}
-                onPress={() => handleDelete(form.formId)}
-              >
-                <Ionicons name="trash-outline" size={24} color="#FF0000" />
-              </TouchableOpacity>
-            </View>
-          ))
+            );
+          })
         )}
       </ScrollView>
     </View>
@@ -77,11 +144,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     padding: 16,
   },
-  title: {
-    fontFamily: 'outfit-medium',
-    fontSize: 24,
-    marginBottom: 20,
-  },
   scrollView: {
     flex: 1,
   },
@@ -93,15 +155,36 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   formCard: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     marginBottom: 12,
     borderWidth: 1,
     borderColor: '#E0E0E0',
+  },
+  formContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+  },
+  formActions: {
+    flexDirection: 'row',
+    borderTopWidth: 1,
+    borderTopColor: '#E0E0E0',
+    padding: 8,
+    justifyContent: 'flex-end',
+    gap: 8
+  },
+  actionButton: {
+    padding: 8,
+  },
+  iconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: '#F0F9FF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
   },
   formInfo: {
     flex: 1,
@@ -117,7 +200,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666666',
   },
-  deleteButton: {
-    padding: 8,
-  }
 }); 
