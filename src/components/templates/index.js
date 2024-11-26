@@ -2,32 +2,19 @@
 import GeneralMedicalTemplate from './Template1';
 import EmergencyTemplate from './Template2';
 import PediatricTemplate from './Template3';
+import OPDTemplate from './Template4';
 
 // Define template components with metadata
 export const TEMPLATE_COMPONENTS = {
-  'template1': {
-    component: GeneralMedicalTemplate,
-    title: 'General Medical Form',
-    description: 'Standard medical examination template',
-    type: 'general'
-  },
-  'template2': {
-    component: EmergencyTemplate,
-    title: 'Emergency Assessment',
-    description: 'Critical care and emergency evaluation form',
-    type: 'emergency'
-  },
-  'template3': {
-    component: PediatricTemplate,
-    title: 'Pediatric Assessment',
-    description: 'Child health examination form',
-    type: 'pediatric'
-  }
+  general: GeneralMedicalTemplate,
+  emergency: EmergencyTemplate,
+  pediatric: PediatricTemplate,
+  opd: OPDTemplate,
 };
 
 // Helper function to get template component
 export function getTemplateComponent(templateCode) {
-  return TEMPLATE_COMPONENTS[templateCode]?.component || null;
+  return TEMPLATE_COMPONENTS[templateCode] || null;
 }
 
 // Helper function to get template details
@@ -38,4 +25,15 @@ export function getTemplateDetails(templateCode) {
     description: template?.description || 'Medical form template',
     type: template?.type || 'general'
   };
+}
+
+// Helper function to get template icon
+export function getTemplateIcon(type) {
+  const icons = {
+    general: 'medical',
+    emergency: 'fitness',
+    pediatric: 'people',
+    opd: 'document-text',
+  };
+  return icons[type] || 'document';
 }
