@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { View, ScrollView, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { getTemplateComponent, getTemplateDetails } from '../components/templates';
-import { filledFormsStore } from './(tabs)/forms';
+import { useFormDataContext } from '../contexts/FormDataContext';
 
 export default function FillForm() {
   const { templateId, formId, isEditing } = useLocalSearchParams();
   const router = useRouter();
   const [formData, setFormData] = useState({});
+  const { saveForm, updateForm, loading, error, clearError } = useFormDataContext();
   
   // Load existing form data if editing
   useEffect(() => {
@@ -24,18 +25,15 @@ export default function FillForm() {
 
   const handleSave = async () => {
     try {
-      const filledForm = {
-        templateId,
-        responses: formData,
-        title: templateDetails?.title || 'Untitled Form'
-      };
+      console.log('Attempting to save form with template:', templateId);
+      console.log('Form data:', formData);
 
       if (isEditing && formId) {
-        await filledFormsStore.updateForm(formId, filledForm);
+        await updateForm(formId, formData);
       } else {
-        await filledFormsStore.addForm(filledForm);
+        await saveForm(templateId, formData);
       }
-
+      
       Alert.alert(
         'Success',
         `Form ${isEditing ? 'updated' : 'saved'} successfully`,
@@ -47,8 +45,11 @@ export default function FillForm() {
         ]
       );
     } catch (error) {
-      console.error('Save error:', error);
-      Alert.alert('Error', `Failed to ${isEditing ? 'update' : 'save'} form`);
+      console.error('Form save error:', error);
+      Alert.alert(
+        'Error',
+        error.message || `Failed to ${isEditing ? 'update' : 'save'} form. Please try again.`
+      );
     }
   };
 
