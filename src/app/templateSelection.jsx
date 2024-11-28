@@ -3,62 +3,95 @@ import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-nati
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { TEMPLATE_COMPONENTS, getTemplateDetails } from '../components/templates';
-import { useFormContext } from '../contexts/FormContext';
+import { getTemplateIcon } from '../utils/templateUtils';
+import { filledFormsService } from '../aws/api/filledForms';
 
 export default function TemplateSelection() {
   const { selectedMessages } = useLocalSearchParams();
   const router = useRouter();
-  const { templates } = useFormContext();
   const [selectedTemplate, setSelectedTemplate] = useState(null);
-
-  const getTemplateIcon = (templateId) => {
-    const icons = {
-      'general': 'document-text-outline',
-      'emergency': 'alert-circle-outline',
-      'pediatric': 'people-outline',
-      'opd': 'medical-outline'
-    };
-    return icons[templateId] || 'document-outline';
-  };
+  const [loading, setLoading] = useState(false);
 
   const handleTemplateSelect = (templateId) => {
     setSelectedTemplate(templateId);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!selectedTemplate) return;
 
-    // Here you would implement the logic to process the selected messages with the template
-    console.log('Selected template:', selectedTemplate);
-    console.log('Selected messages:', JSON.parse(selectedMessages));
+    try {
+      setLoading(true);
+      
+      // Log the received message
+      console.log('Received message:', selectedMessages);
 
-    // Navigate back to talk screen
-    router.back();
+      // Create the form with the exact message
+      const response = await filledFormsService.createFilledForm({
+        templateCode: selectedTemplate,
+        conversationText: selectedMessages, // Use the message text directly
+        templateFields: TEMPLATE_COMPONENTS[selectedTemplate].TEMPLATE_FIELDS
+      });
+
+      console.log('API Response:', response);
+
+      if (response && response.data) {
+        // Ensure we have all fields from the response
+        const formData = {
+          patientInfo: {
+            fullName: response.data.patientInfo?.fullName || '',
+            age: response.data.patientInfo?.age || '',
+            gender: response.data.patientInfo?.gender || ''
+          },
+          vitalSigns: {
+            temperature: response.data.vitalSigns?.temperature || '',
+            bloodPressure: response.data.vitalSigns?.bloodPressure || '',
+            heartRate: response.data.vitalSigns?.heartRate || ''
+          }
+        };
+
+        console.log('Form data being passed:', formData);
+
+        router.push({
+          pathname: '/fillForm',
+          params: {
+            templateId: selectedTemplate,
+            initialData: JSON.stringify(formData)
+          }
+        });
+      } else {
+        throw new Error('Invalid response from server');
+      }
+    } catch (error) {
+      console.error('Error creating form:', error);
+      Alert.alert('Error', 'Failed to process the form data');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity 
-          onPress={() => router.back()} 
           style={styles.backButton}
+          onPress={() => router.back()}
         >
-          <Ionicons name="arrow-back" size={24} color="#000" />
+          <Ionicons name="arrow-back" size={24} color="#000000" />
         </TouchableOpacity>
-        <Text style={styles.title}>Choose Template</Text>
+        <Text style={styles.title}>Select Template</Text>
         <TouchableOpacity 
-          onPress={handleSubmit}
           style={[
             styles.submitButton,
-            !selectedTemplate && styles.submitButtonDisabled
+            (!selectedTemplate || loading) && styles.submitButtonDisabled
           ]}
-          disabled={!selectedTemplate}
+          onPress={handleSubmit}
+          disabled={!selectedTemplate || loading}
         >
           <Text style={[
             styles.submitButtonText,
-            !selectedTemplate && styles.submitButtonTextDisabled
+            (!selectedTemplate || loading) && styles.submitButtonTextDisabled
           ]}>
-            Submit
+            {loading ? 'Processing...' : 'Submit'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -66,38 +99,35 @@ export default function TemplateSelection() {
       <ScrollView style={styles.templateList}>
         {Object.keys(TEMPLATE_COMPONENTS).map((templateId) => {
           const details = getTemplateDetails(templateId);
-          const iconName = getTemplateIcon(templateId);
-          
+          const isSelected = selectedTemplate === templateId;
+
           return (
             <TouchableOpacity
               key={templateId}
               style={[
                 styles.templateItem,
-                selectedTemplate === templateId && styles.selectedTemplateItem
+                isSelected && styles.selectedTemplateItem
               ]}
               onPress={() => handleTemplateSelect(templateId)}
             >
               <View style={styles.templateIcon}>
                 <Ionicons 
-                  name={iconName} 
+                  name={getTemplateIcon(details.type)}
                   size={24} 
-                  color={selectedTemplate === templateId ? "#007AFF" : "#666"} 
+                  color="#007AFF" 
                 />
               </View>
               <View style={styles.templateInfo}>
                 <Text style={[
                   styles.templateName,
-                  selectedTemplate === templateId && styles.selectedTemplateText
+                  isSelected && styles.selectedTemplateText
                 ]}>
-                  {details.name}
+                  {details.title}
                 </Text>
                 <Text style={styles.templateDescription}>
                   {details.description}
                 </Text>
               </View>
-              {selectedTemplate === templateId && (
-                <Ionicons name="checkmark-circle" size={24} color="#007AFF" />
-              )}
             </TouchableOpacity>
           );
         })}

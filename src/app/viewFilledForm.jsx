@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, Alert, SafeAreaView, Text, ScrollView } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -14,7 +14,21 @@ export default function ViewFilledForm() {
   const { forms } = useFormDataContext();
 
   const filledForm = forms.find(form => form.formId === formId);
-  const TemplateComponent = filledForm ? getTemplateComponent(filledForm.templateId) : null;
+  
+  // Debug logs
+  useEffect(() => {
+    console.log('Current formId:', formId);
+    console.log('Found filled form:', filledForm);
+    if (filledForm) {
+      console.log('Template code:', filledForm.templateCode);
+      const template = getTemplateComponent(filledForm.templateCode);
+      console.log('Found template:', template ? 'Yes' : 'No');
+    }
+  }, [formId, filledForm]);
+
+  // Get template component - make sure we're using lowercase for consistency
+  const TemplateComponent = filledForm ? 
+    getTemplateComponent(filledForm.templateCode.toLowerCase()) : null;
 
   const handleShare = async () => {
     if (!filledForm) return;
@@ -24,7 +38,7 @@ export default function ViewFilledForm() {
     }
   };
 
-  if (!filledForm || !TemplateComponent) {
+  if (!filledForm) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={[styles.header, { marginTop: insets.top }]}>
@@ -37,6 +51,26 @@ export default function ViewFilledForm() {
         </View>
         <View style={styles.contentContainer}>
           <Text style={styles.errorText}>Form not found</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (!TemplateComponent) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={[styles.header, { marginTop: insets.top }]}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <Ionicons name="arrow-back" size={24} color="#000000" />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.contentContainer}>
+          <Text style={styles.errorText}>
+            Template not found: {filledForm.templateCode}
+          </Text>
         </View>
       </SafeAreaView>
     );
@@ -75,33 +109,33 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   header: {
-    height: 56,
     flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingBottom: 12,
-    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
-    zIndex: 1000,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-  },
-  contentContainer: {
-    flex: 1,
+    borderBottomColor: '#E5E5E5',
   },
   backButton: {
     padding: 8,
   },
-  shareButton: {
+  headerTitle: {
+    flex: 1,
+    fontSize: 18,
+    fontFamily: 'outfit-medium',
+    marginLeft: 8,
+    color: '#000000',
+  },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  actionButton: {
     padding: 8,
+    marginLeft: 8,
+  },
+  formContainer: {
+    flex: 1,
+    padding: 16,
   },
   errorText: {
     fontFamily: 'outfit-regular',
@@ -110,4 +144,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
   },
-}); 
+});

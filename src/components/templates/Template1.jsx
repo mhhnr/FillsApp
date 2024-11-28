@@ -1,168 +1,186 @@
 import React from 'react';
-import { View, Text, TextInput, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
 
-export default function GeneralMedicalTemplate({ isTemplate = true, data = {}, onDataChange, readOnly = false }) {
-  const handleChange = (field, value) => {
-    if (!isTemplate && !readOnly && onDataChange) {
-      onDataChange({
-        ...data,
-        [field]: value
-      });
+export const TEMPLATE_FIELDS = {
+  patientInfo: {
+    fullName: {
+      type: 'text',
+      label: 'Full Name',
+      required: true,
+      placeholder: "Patient's full name"
+    },
+    age: {
+      type: 'number',
+      label: 'Age',
+      required: true,
+      placeholder: 'Age'
+    },
+    gender: {
+      type: 'text',
+      label: 'Gender',
+      required: true,
+      placeholder: 'Gender'
+    }
+  },
+  vitalSigns: {
+    temperature: {
+      type: 'text',
+      label: 'Temperature',
+      required: true,
+      placeholder: '°C'
+    },
+    bloodPressure: {
+      type: 'text',
+      label: 'Blood Pressure',
+      required: true,
+      placeholder: 'mmHg'
+    },
+    heartRate: {
+      type: 'text',
+      label: 'Heart Rate',
+      required: true,
+      placeholder: 'bpm'
+    }
+  }
+};
+
+export default function Template1({ data = {}, onDataChange, readOnly = false }) {
+  // Ensure we have the complete data structure
+  const formData = {
+    patientInfo: {
+      fullName: data?.patientInfo?.fullName || '',
+      age: data?.patientInfo?.age?.toString() || '',
+      gender: data?.patientInfo?.gender || ''
+    },
+    vitalSigns: {
+      temperature: data?.vitalSigns?.temperature?.toString() || '',
+      bloodPressure: data?.vitalSigns?.bloodPressure || '',
+      heartRate: data?.vitalSigns?.heartRate?.toString() || ''
+    }
+  };
+
+  console.log('Template1 using data:', formData);
+
+  const handleChange = (section, field, value) => {
+    if (onDataChange && !readOnly) {
+      const newData = {
+        ...formData,
+        [section]: {
+          ...formData[section],
+          [field]: value
+        }
+      };
+      console.log('Template1 updating data:', newData);
+      onDataChange(newData);
     }
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.hospitalInfo}>
-          <Text style={styles.hospitalName}>GENERAL MEDICAL EXAMINATION</Text>
-          <Text style={styles.hospitalSubName}>Primary Care Assessment Form</Text>
-        </View>
-      </View>
-
+    <View style={styles.container}>
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Patient Information</Text>
-        <View style={styles.row}>
-          <View style={styles.field}>
-            <Text style={styles.label}>Full Name:</Text>
-            <TextInput 
-              style={[styles.input, readOnly && styles.readOnlyInput]}
-              editable={!isTemplate && !readOnly}
-              value={data.fullName}
-              placeholder="Patient's full name"
-              onChangeText={(value) => handleChange('fullName', value)}
-            />
-          </View>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>Full Name</Text>
+          <TextInput
+            style={[styles.input, readOnly && styles.readOnlyInput]}
+            value={formData.patientInfo.fullName}
+            onChangeText={(text) => handleChange('patientInfo', 'fullName', text)}
+            placeholder="Patient's full name"
+            editable={!readOnly}
+          />
         </View>
-
-        <View style={styles.row}>
-          <View style={styles.field}>
-            <Text style={styles.label}>Age:</Text>
-            <TextInput 
-              style={[styles.input, readOnly && styles.readOnlyInput]}
-              editable={!isTemplate && !readOnly}
-              value={data.age}
-              placeholder="Age"
-              keyboardType="numeric"
-              onChangeText={(value) => handleChange('age', value)}
-            />
-          </View>
-          <View style={styles.field}>
-            <Text style={styles.label}>Gender:</Text>
-            <TextInput 
-              style={[styles.input, readOnly && styles.readOnlyInput]}
-              editable={!isTemplate && !readOnly}
-              value={data.gender}
-              placeholder="Gender"
-              onChangeText={(value) => handleChange('gender', value)}
-            />
-          </View>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>Age</Text>
+          <TextInput
+            style={[styles.input, readOnly && styles.readOnlyInput]}
+            value={formData.patientInfo.age}
+            onChangeText={(text) => handleChange('patientInfo', 'age', text)}
+            placeholder="Age"
+            keyboardType="numeric"
+            editable={!readOnly}
+          />
         </View>
-
-        <View style={styles.row}>
-          <View style={styles.field}>
-            <Text style={styles.label}>Blood Pressure:</Text>
-            <TextInput 
-              style={[styles.input, readOnly && styles.readOnlyInput]}
-              editable={!isTemplate && !readOnly}
-              value={data.bloodPressure}
-              placeholder="BP"
-              onChangeText={(value) => handleChange('bloodPressure', value)}
-            />
-          </View>
-          <View style={styles.field}>
-            <Text style={styles.label}>Temperature:</Text>
-            <TextInput 
-              style={[styles.input, readOnly && styles.readOnlyInput]}
-              editable={!isTemplate && !readOnly}
-              value={data.temperature}
-              placeholder="°F"
-              onChangeText={(value) => handleChange('temperature', value)}
-            />
-          </View>
-        </View>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Chief Complaints</Text>
-        <View style={styles.field}>
-          <Text style={styles.label}>Present Complaints:</Text>
-          <TextInput 
-            style={[styles.input, readOnly && styles.readOnlyInput, styles.textArea]}
-            editable={!isTemplate && !readOnly}
-            value={data.complaints}
-            placeholder="Describe current symptoms"
-            multiline
-            numberOfLines={4}
-            onChangeText={(value) => handleChange('complaints', value)}
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>Gender</Text>
+          <TextInput
+            style={[styles.input, readOnly && styles.readOnlyInput]}
+            value={formData.patientInfo.gender}
+            onChangeText={(text) => handleChange('patientInfo', 'gender', text)}
+            placeholder="Gender"
+            editable={!readOnly}
           />
         </View>
       </View>
-    </ScrollView>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Vital Signs</Text>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>Temperature</Text>
+          <TextInput
+            style={[styles.input, readOnly && styles.readOnlyInput]}
+            value={formData.vitalSigns.temperature}
+            onChangeText={(text) => handleChange('vitalSigns', 'temperature', text)}
+            placeholder="Temperature (°C)"
+            editable={!readOnly}
+          />
+        </View>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>Blood Pressure</Text>
+          <TextInput
+            style={[styles.input, readOnly && styles.readOnlyInput]}
+            value={formData.vitalSigns.bloodPressure}
+            onChangeText={(text) => handleChange('vitalSigns', 'bloodPressure', text)}
+            placeholder="Blood Pressure (mmHg)"
+            editable={!readOnly}
+          />
+        </View>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>Heart Rate</Text>
+          <TextInput
+            style={[styles.input, readOnly && styles.readOnlyInput]}
+            value={formData.vitalSigns.heartRate}
+            onChangeText={(text) => handleChange('vitalSigns', 'heartRate', text)}
+            placeholder="Heart Rate (bpm)"
+            editable={!readOnly}
+          />
+        </View>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
-  header: {
     padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
-    alignItems: 'center',
-  },
-  hospitalInfo: {
-    alignItems: 'center',
-  },
-  hospitalName: {
-    fontFamily: 'outfit-bold',
-    fontSize: 18,
-    marginBottom: 4,
-  },
-  hospitalSubName: {
-    fontFamily: 'outfit-medium',
-    fontSize: 16,
-    marginBottom: 2,
   },
   section: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    marginBottom: 24,
   },
   sectionTitle: {
+    fontSize: 20,
     fontFamily: 'outfit-medium',
-    fontSize: 16,
-    marginBottom: 12,
-    color: '#007AFF',
+    marginBottom: 16,
+    textTransform: 'capitalize',
   },
-  row: {
-    flexDirection: 'row',
-    gap: 12,
-    marginBottom: 12,
-  },
-  field: {
-    flex: 1,
+  fieldContainer: {
+    marginBottom: 16,
   },
   label: {
-    fontFamily: 'outfit-medium',
-    fontSize: 14,
-    marginBottom: 4,
+    fontSize: 16,
+    fontFamily: 'outfit-regular',
+    marginBottom: 8,
+    color: '#333333',
   },
   input: {
     borderWidth: 1,
     borderColor: '#E0E0E0',
     borderRadius: 8,
-    padding: 8,
+    padding: 12,
+    fontSize: 16,
     fontFamily: 'outfit-regular',
-  },
-  textArea: {
-    height: 100,
-    textAlignVertical: 'top',
   },
   readOnlyInput: {
     backgroundColor: '#F5F5F5',
-    color: '#000000',
-  },
+    color: '#666666',
+  }
 });

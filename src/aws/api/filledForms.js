@@ -1,58 +1,70 @@
 import { API_CONFIG } from '../config/aws-config';
 import { auth } from '../../configs/FirebaseConfig';
+import { TEMPLATE_COMPONENTS } from '../../components/templates';
 
 export const filledFormsService = {
   async getFilledForms() {
-    const token = await auth.currentUser?.getIdToken();
-    const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.FILLED_FORMS.GET}`, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    });
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch filled forms');
-    }
-    
-    const forms = await response.json();
-    return forms.map(form => ({
-      ...form,
-      data: form.data || {}
-    }));
-  },
-
-  async createFilledForm(filledForm) {
     try {
       const token = await auth.currentUser?.getIdToken();
+      console.log('[FilledFormsService] Getting forms...');
       
-      const formPayload = {
-        templateId: filledForm.templateCode,
-        data: filledForm.data.responses || filledForm.data,
-        createdAt: new Date().toISOString()
-      };
+      const url = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.FILLED_FORMS.GET}`;
+      console.log('[FilledFormsService] Request URL:', url);
+      
+      const response = await fetch(url, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      console.log('[FilledFormsService] Response status:', response.status);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('[FilledFormsService] Error response:', errorText);
+        throw new Error(`Failed to fetch forms: ${response.status}`);
+      }
+      
+      const forms = await response.json();
+      console.log('[FilledFormsService] Received forms:', forms);
+      return forms;
+    } catch (error) {
+      console.error('[FilledFormsService] Error:', error);
+      throw error;
+    }
+  },
 
-      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.FILLED_FORMS.CREATE}`, {
+  async createFilledForm(formData) {
+    try {
+      const token = await auth.currentUser?.getIdToken();
+      console.log('[FilledFormsService] Creating form with data:', formData);
+      
+      const url = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.FILLED_FORMS.CREATE}`;
+      console.log('[FilledFormsService] Request URL:', url);
+      
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formPayload)
+        body: JSON.stringify(formData)
       });
 
+      console.log('[FilledFormsService] Response status:', response.status);
+      
       if (!response.ok) {
-        const errorData = await response.text();
-        throw new Error(`Failed to create filled form: ${errorData}`);
+        const errorText = await response.text();
+        console.error('[FilledFormsService] Error response:', errorText);
+        throw new Error(`Failed to create form: ${response.status}`);
       }
 
-      const data = await response.json();
-      return {
-        ...data,
-        data: formPayload.data
-      };
+      const result = await response.json();
+      console.log('[FilledFormsService] Created form result:', result);
+      return result;
     } catch (error) {
-      console.error('Create form service error:', error);
+      console.error('[FilledFormsService] Create form error:', error);
       throw error;
     }
   },

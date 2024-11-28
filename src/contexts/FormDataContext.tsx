@@ -1,130 +1,94 @@
-import React, { createContext, useContext, useState } from 'react';
-import { templateService } from '../aws/api/templates';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { filledFormsService } from '../aws/api/filledForms';
 
-const FormDataContext = createContext(null);
+interface FormData {
+  templateCode: string;
+  data: {
+    patientInfo: {
+      fullName: string;
+      age: string | number;
+      gender: string;
+    };
+    vitalSigns: {
+      temperature: string;
+      bloodPressure: string;
+      heartRate: string | number;
+    };
+  };
+}
+
+interface FilledForm extends FormData {
+  formId: string;
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface FormDataContextType {
+  forms: FilledForm[];
+  loading: boolean;
+  error: string | null;
+  getForms: () => Promise<void>;
+  saveForm: (formData: FormData) => Promise<FilledForm>;
+  clearError: () => void;
+}
+
+const FormDataContext = createContext<FormDataContextType | undefined>(undefined);
+
+export function FormDataProvider({ children }: { children: ReactNode }) {
+  const [forms, setForms] = useState<FilledForm[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const getForms = async () => {
+    try {
+      setLoading(true);
+      const response = await filledFormsService.getFilledForms();
+      console.log('Received forms data:', JSON.stringify(response, null, 2));
+      setForms(response);
+    } catch (err) {
+      console.error('Error fetching forms:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch forms');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const saveForm = async (formData: FormData): Promise<FilledForm> => {
+    try {
+      setLoading(true);
+      const response = await filledFormsService.createFilledForm(formData);
+      setForms(prevForms => [...prevForms, response]);
+      return response;
+    } catch (err) {
+      console.error('Error saving form:', err);
+      setError(err instanceof Error ? err.message : 'Failed to save form');
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const clearError = () => setError(null);
+
+  return (
+    <FormDataContext.Provider value={{
+      forms,
+      loading,
+      error,
+      getForms,
+      saveForm,
+      clearError
+    }}>
+      {children}
+    </FormDataContext.Provider>
+  );
+}
 
 export const useFormDataContext = () => {
-    const context = useContext(FormDataContext);
-    if (!context) {
-        throw new Error('useFormDataContext must be used within a FormDataProvider');
-    }
-    return context;
-};
-
-export function FormDataProvider({ children }) {
-    const [forms, setForms] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-
-    // Save filled form with template-specific validation
-    const saveForm = async (templateCode, formData) => {
-        setLoading(true);
-        try {
-            // Validate required fields based on template type
-            const missingFields = validateFormData(templateCode, formData);
-            if (missingFields.length > 0) {
-                throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
-            }
-
-            const response = await filledFormsService.createFilledForm({
-                templateCode,
-                data: {
-                    ...formData,
-                    createdAt: new Date().toISOString()
-                }
-            });
-            
-            setForms(prevForms => [...prevForms, response]);
-            return response;
-        } catch (err) {
-            console.error('Save form error:', err);
-            setError(err.message);
-            throw err;
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // Validate required fields based on template type
-    const validateFormData = (templateCode, data) => {
-        const requiredFields = {
-            general: ['fullName', 'age', 'gender'],
-            emergency: ['triageLevel', 'arrivalTime'],
-            pediatric: ['childName', 'age', 'dateOfBirth'],
-            opd: ['umrNo', 'patientName']
-        };
-
-        const fields = requiredFields[templateCode] || [];
-        return fields.filter(field => !data[field]);
-    };
-
-    // Get all forms with template info
-    const getForms = async () => {
-        setLoading(true);
-        try {
-            const response = await filledFormsService.getFilledForms();
-            setForms(response);
-            return response;
-        } catch (err) {
-            console.error('Get forms error:', err);
-            setError(err.message);
-            throw err;
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // Update existing form
-    const updateForm = async (formId, formData) => {
-        setLoading(true);
-        try {
-            const response = await filledFormsService.updateFilledForm(formId, {
-                data: {
-                    ...formData,
-                    updatedAt: new Date().toISOString()
-                }
-            });
-            setForms(prevForms => 
-                prevForms.map(form => form.formId === formId ? response : form)
-            );
-            return response;
-        } catch (err) {
-            console.error('Update form error:', err);
-            setError(err.message);
-            throw err;
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // Delete form
-    const deleteForm = async (formId) => {
-        setLoading(true);
-        try {
-            await filledFormsService.deleteFilledForm(formId);
-            setForms(prevForms => prevForms.filter(form => form.formId !== formId));
-        } catch (err) {
-            console.error('Delete form error:', err);
-            setError(err.message);
-            throw err;
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return (
-        <FormDataContext.Provider value={{
-            forms,
-            loading,
-            error,
-            saveForm,
-            getForms,
-            updateForm,
-            deleteForm,
-            clearError: () => setError(null)
-        }}>
-            {children}
-        </FormDataContext.Provider>
-    );
-} 
+  const context = useContext(FormDataContext);
+  if (context === undefined) {
+    throw new Error('useFormDataContext must be used within a FormDataProvider');
+  }
+  return context;
+}; 

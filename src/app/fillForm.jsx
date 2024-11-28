@@ -5,11 +5,50 @@ import { getTemplateComponent, getTemplateDetails } from '../components/template
 import { useFormDataContext } from '../contexts/FormDataContext';
 
 export default function FillForm() {
-  const { templateId, formId, isEditing } = useLocalSearchParams();
+  const { templateId, formId, isEditing, initialData } = useLocalSearchParams();
   const router = useRouter();
-  const [formData, setFormData] = useState({});
   const { saveForm, updateForm, loading, error, clearError } = useFormDataContext();
   
+  const [formData, setFormData] = useState(() => {
+    if (initialData) {
+      try {
+        return JSON.parse(initialData);
+      } catch (e) {
+        console.error('Error parsing initial data:', e);
+        return {};
+      }
+    }
+    return {};
+  });
+
+  const handleSave = async () => {
+    try {
+      console.log('Saving form with data:', formData);
+      
+      const formPayload = {
+        templateCode: templateId,
+        data: formData
+      };
+
+      console.log('Form payload:', formPayload);
+
+      if (isEditing && formId) {
+        await updateForm(formId, formPayload);
+      } else {
+        await saveForm(formPayload);
+      }
+
+      // Navigate back to forms tab with refresh parameter
+      router.push({
+        pathname: '/(tabs)/forms',
+        params: { refresh: Date.now() }
+      });
+    } catch (err) {
+      Alert.alert('Error', 'Failed to save form');
+      console.error('Save form error:', err);
+    }
+  };
+
   // Load existing form data if editing
   useEffect(() => {
     if (isEditing && formId) {
@@ -23,40 +62,10 @@ export default function FillForm() {
   const TemplateComponent = getTemplateComponent(templateId);
   const templateDetails = getTemplateDetails(templateId);
 
-  const handleSave = async () => {
-    try {
-      console.log('Attempting to save form with template:', templateId);
-      console.log('Form data:', formData);
-
-      if (isEditing && formId) {
-        await updateForm(formId, formData);
-      } else {
-        await saveForm(templateId, formData);
-      }
-      
-      Alert.alert(
-        'Success',
-        `Form ${isEditing ? 'updated' : 'saved'} successfully`,
-        [
-          {
-            text: 'OK',
-            onPress: () => router.replace('/(tabs)/forms')
-          }
-        ]
-      );
-    } catch (error) {
-      console.error('Form save error:', error);
-      Alert.alert(
-        'Error',
-        error.message || `Failed to ${isEditing ? 'update' : 'save'} form. Please try again.`
-      );
-    }
-  };
-
   if (!TemplateComponent) {
     return (
       <View style={styles.container}>
-        <Text>Template not found</Text>
+        <Text style={styles.errorText}>Template not found</Text>
       </View>
     );
   }
@@ -72,11 +81,12 @@ export default function FillForm() {
       </ScrollView>
       
       <TouchableOpacity 
-        style={styles.saveButton}
+        style={[styles.saveButton, loading && styles.saveButtonDisabled]}
         onPress={handleSave}
+        disabled={loading}
       >
         <Text style={styles.saveButtonText}>
-          {isEditing ? 'Update Form' : 'Save Form'}
+          {loading ? 'Saving...' : isEditing ? 'Update Form' : 'Save Form'}
         </Text>
       </TouchableOpacity>
     </View>
@@ -98,9 +108,19 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
   },
+  saveButtonDisabled: {
+    opacity: 0.5,
+  },
   saveButtonText: {
     color: '#FFFFFF',
     fontFamily: 'outfit-medium',
     fontSize: 16,
   },
+  errorText: {
+    fontFamily: 'outfit-regular',
+    fontSize: 16,
+    color: '#666666',
+    textAlign: 'center',
+    marginTop: 20,
+  }
 }); 

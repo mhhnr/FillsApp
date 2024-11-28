@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Pressable, Animated as RNAnimated, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Pressable, Animated as RNAnimated, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native'
 import React, { useState, useEffect, useRef } from 'react'
 import Animated, { 
   useAnimatedStyle, 
@@ -132,9 +132,25 @@ export default function Talk() {
   };
 
   const handleChooseTemplate = () => {
+    // Get the actual text content of selected messages
+    const selectedContent = selectedMessages.map(messageId => {
+      const message = messages.find(m => m.id === messageId);
+      return message?.text || ''; // Make sure we're accessing the text property
+    }).join(' ');
+
+    console.log('Selected message content:', selectedContent);
+
+    if (!selectedContent) {
+      Alert.alert('Error', 'Please select a message first');
+      return;
+    }
+
+    // Navigate with the actual message content
     router.push({
       pathname: '/templateSelection',
-      params: { selectedMessages: JSON.stringify(selectedMessages) }
+      params: {
+        selectedMessages: selectedContent // Send the actual text content
+      }
     });
   };
 

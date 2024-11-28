@@ -1,39 +1,30 @@
-// Manual imports for templates
-import GeneralMedicalTemplate from './Template1';
-import EmergencyTemplate from './Template2';
-import PediatricTemplate from './Template3';
-import OPDTemplate from './Template4';
+import Template1, { TEMPLATE_FIELDS as GeneralTemplateFields } from './Template1';
 
-// Define template components with metadata
+// Export template components with their fields
 export const TEMPLATE_COMPONENTS = {
-  general: GeneralMedicalTemplate,
-  emergency: EmergencyTemplate,
-  pediatric: PediatricTemplate,
-  opd: OPDTemplate,
+  'general': {
+    component: Template1,
+    TEMPLATE_FIELDS: GeneralTemplateFields,
+    title: 'General Medical Form',
+    description: 'Standard medical examination form',
+    type: 'medical'
+  }
 };
 
-// Helper function to get template component
-export function getTemplateComponent(templateCode) {
-  return TEMPLATE_COMPONENTS[templateCode] || null;
-}
+// Helper functions
+export const getTemplateComponent = (templateId) => {
+  return TEMPLATE_COMPONENTS[templateId]?.component;
+};
 
-// Helper function to get template details
-export function getTemplateDetails(templateCode) {
-  const template = TEMPLATE_COMPONENTS[templateCode];
+export const getTemplateDetails = (templateId) => {
+  const template = TEMPLATE_COMPONENTS[templateId];
   return {
-    title: template?.title || `Template ${templateCode}`,
-    description: template?.description || 'Medical form template',
+    title: template?.title || 'Unknown Template',
+    description: template?.description || '',
     type: template?.type || 'general'
   };
-}
+};
 
-// Helper function to get template icon
-export function getTemplateIcon(type) {
-  const icons = {
-    general: 'medical',
-    emergency: 'fitness',
-    pediatric: 'people',
-    opd: 'document-text',
-  };
-  return icons[type] || 'document';
-}
+export const getTemplateFields = (templateId) => {
+  return TEMPLATE_COMPONENTS[templateId]?.TEMPLATE_FIELDS;
+};
