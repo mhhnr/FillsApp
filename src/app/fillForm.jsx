@@ -21,31 +21,31 @@ export default function FillForm() {
     return {};
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleSave = async () => {
+    if (loading || isSubmitting) return;
+
     try {
-      console.log('Saving form with data:', formData);
+      setIsSubmitting(true);
       
-      const formPayload = {
-        templateCode: templateId,
-        data: formData
-      };
-
-      console.log('Form payload:', formPayload);
-
-      if (isEditing && formId) {
-        await updateForm(formId, formPayload);
+      if (isEditing) {
+        await updateForm(formId, {
+          templateCode: templateId,
+          data: formData
+        });
       } else {
-        await saveForm(formPayload);
+        await saveForm({
+          templateCode: templateId,
+          data: formData
+        });
       }
-
-      // Navigate back to forms tab with refresh parameter
-      router.push({
-        pathname: '/(tabs)/forms',
-        params: { refresh: Date.now() }
-      });
-    } catch (err) {
-      Alert.alert('Error', 'Failed to save form');
-      console.error('Save form error:', err);
+      
+      router.replace('/(tabs)/forms?refresh=true');
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -81,12 +81,15 @@ export default function FillForm() {
       </ScrollView>
       
       <TouchableOpacity 
-        style={[styles.saveButton, loading && styles.saveButtonDisabled]}
+        style={[
+          styles.saveButton, 
+          (loading || isSubmitting) && styles.saveButtonDisabled
+        ]}
         onPress={handleSave}
-        disabled={loading}
+        disabled={loading || isSubmitting}
       >
         <Text style={styles.saveButtonText}>
-          {loading ? 'Saving...' : isEditing ? 'Update Form' : 'Save Form'}
+          {loading || isSubmitting ? 'Saving...' : isEditing ? 'Update Form' : 'Save Form'}
         </Text>
       </TouchableOpacity>
     </View>
