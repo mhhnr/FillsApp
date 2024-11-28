@@ -31,6 +31,7 @@ interface FormDataContextType {
   getForms: () => Promise<void>;
   saveForm: (formData: FormData) => Promise<FilledForm>;
   clearError: () => void;
+  deleteForm: (formId: string) => Promise<void>;
 }
 
 const FormDataContext = createContext<FormDataContextType | undefined>(undefined);
@@ -71,6 +72,20 @@ export function FormDataProvider({ children }: { children: ReactNode }) {
 
   const clearError = () => setError(null);
 
+  const deleteForm = async (formId: string) => {
+    try {
+      setLoading(true);
+      await filledFormsService.deleteFilledForm(formId);
+      setForms(prevForms => prevForms.filter(form => form.formId !== formId));
+    } catch (err) {
+      console.error('Error deleting form:', err);
+      setError(err instanceof Error ? err.message : 'Failed to delete form');
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <FormDataContext.Provider value={{
       forms,
@@ -78,7 +93,8 @@ export function FormDataProvider({ children }: { children: ReactNode }) {
       error,
       getForms,
       saveForm,
-      clearError
+      clearError,
+      deleteForm
     }}>
       {children}
     </FormDataContext.Provider>

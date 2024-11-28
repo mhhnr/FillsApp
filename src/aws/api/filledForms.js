@@ -87,17 +87,33 @@ export const filledFormsService = {
   },
 
   async deleteFilledForm(formId) {
-    const token = await auth.currentUser?.getIdToken();
-    const response = await fetch(
-      `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.FILLED_FORMS.DELETE}`.replace('{formId}', formId),
-      {
+    try {
+      const token = await auth.currentUser?.getIdToken();
+      console.log('[FilledFormsService] Deleting form:', formId);
+      
+      const url = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.FILLED_FORMS.DELETE.replace('{formId}', formId)}`;
+      console.log('[FilledFormsService] Delete URL:', url);
+      
+      const response = await fetch(url, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
+      });
+
+      console.log('[FilledFormsService] Delete response status:', response.status);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('[FilledFormsService] Delete error response:', errorText);
+        throw new Error(`Failed to delete form: ${response.status}`);
       }
-    );
-    if (!response.ok) throw new Error('Failed to delete filled form');
-    return response.json();
+
+      return true; // Successfully deleted
+    } catch (error) {
+      console.error('[FilledFormsService] Delete form error:', error);
+      throw error;
+    }
   }
 };

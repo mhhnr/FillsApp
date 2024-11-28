@@ -360,31 +360,48 @@ def list_filled_forms(user_id: str, template_code: Optional[str] = None) -> list
     """List all filled forms for a user, optionally filtered by template."""
     try:
         if template_code:
+            # Use the GSI with templateId instead of templateCode
             response = filled_forms_table.query(
-                IndexName='userIdTemplateCodeIndex',
-                KeyConditionExpression='userId = :uid AND templateCode = :tc',
+                IndexName='userIdIndex',
+                KeyConditionExpression='userId = :uid AND templateId = :tid',
                 ExpressionAttributeValues={
                     ':uid': user_id,
-                    ':tc': template_code
+                    ':tid': template_code  # We're using templateCode as templateId
                 }
             )
         else:
-            # Changed to use userId-index for querying all forms
+            # When no template_code is provided, just query by userId
             response = filled_forms_table.query(
-                IndexName='userId-index',  # Make sure this matches your DynamoDB index name
+                IndexName='userIdIndex',
                 KeyConditionExpression='userId = :uid',
                 ExpressionAttributeValues={
                     ':uid': user_id
                 }
             )
         
-        logger.info(f"Retrieved forms for user {user_id}: {response.get('Items', [])}")
-        return response.get('Items', [])
+        items = response.get('Items', [])
+        logger.info(f"Query returned {len(items)} items")
+        
+        if not items:
+            # Fallback to scan if query returns no results
+            logger.info("Query returned no results, attempting scan fallback")
+            scan_response = filled_forms_table.scan()
+            all_items = scan_response.get('Items', [])
+            
+            # Filter items for the specific user
+            items = [item for item in all_items if item.get('userId') == user_id]
+            if template_code:
+                items = [item for item in items if item.get('templateCode') == template_code]
+            
+            logger.info(f"Fallback scan found {len(items)} items")
+        
+        return items
+        
     except Exception as e:
         logger.error(f"Error listing filled forms: {str(e)}")
         logger.error(traceback.format_exc())
         raise
-
+        
 def update_filled_form(form_id: str, user_id: str, form_data: Dict[str, Any]) -> Dict[str, Any]:
     """Update a filled form with proper type handling."""
     timestamp = int(time.time())

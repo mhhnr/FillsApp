@@ -8,7 +8,7 @@ import { useFormDataContext } from '../../contexts/FormDataContext';
 
 export default function Forms() {
   const router = useRouter();
-  const { forms, getForms, loading } = useFormDataContext();
+  const { forms, getForms, loading, deleteForm } = useFormDataContext();
   const { refresh } = useLocalSearchParams();
 
   useEffect(() => {
@@ -25,6 +25,39 @@ export default function Forms() {
       pathname: '/viewFilledForm',
       params: { formId }
     });
+  };
+
+  const handleDelete = async (formId) => {
+    Alert.alert(
+      "Delete Form",
+      "Are you sure you want to delete this form?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              console.log('Attempting to delete form:', formId);
+              await deleteForm(formId);
+              console.log('Form deleted successfully');
+              // Refresh the forms list
+              getForms();
+            } catch (error) {
+              console.error('Delete error:', error);
+              Alert.alert(
+                "Error",
+                `Failed to delete form: ${error.message || 'Unknown error'}`,
+                [{ text: "OK" }]
+              );
+            }
+          }
+        }
+      ]
+    );
   };
 
   if (loading) {
@@ -64,7 +97,19 @@ export default function Forms() {
                     </Text>
                     <Text style={styles.formDate}>{formDate}</Text>
                   </View>
-                  <Ionicons name="chevron-forward" size={24} color="#666666" />
+                  <View style={styles.actionButtons}>
+                    <TouchableOpacity
+                      onPress={(e) => {
+                        e.stopPropagation();
+                        handleDelete(form.formId);
+                      }}
+                      style={styles.deleteButton}
+                      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                    >
+                      <Ionicons name="trash-outline" size={22} color="#FF3B30" />
+                    </TouchableOpacity>
+                    <Ionicons name="chevron-forward" size={24} color="#666666" />
+                  </View>
                 </View>
               </TouchableOpacity>
             );
@@ -105,6 +150,7 @@ const styles = StyleSheet.create({
   formHeader: {
     flexDirection: 'row',
     alignItems: 'center',
+    width: '100%',
   },
   formInfo: {
     flex: 1,
@@ -133,5 +179,14 @@ const styles = StyleSheet.create({
     color: '#666666',
     textAlign: 'center',
     marginTop: 20,
-  }
+  },
+  actionButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  deleteButton: {
+    padding: 8,
+    marginRight: 4,
+  },
 }); 
