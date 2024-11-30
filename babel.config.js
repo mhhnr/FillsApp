@@ -44,7 +44,16 @@ module.exports = api => {
             '@react-native-voice/voice': '@react-native-voice/voice',
             // Alias for the assets directory
             '@assets': './assets'
-          }
+          },
+          extensions: [
+            '.ios.js',
+            '.android.js',
+            '.js',
+            '.jsx',
+            '.json',
+            '.tsx',
+            '.ts'
+          ]
         }
       ]
     ]

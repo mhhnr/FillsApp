@@ -15,7 +15,8 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSMicrophoneUsageDescription": "This app needs access to microphone to record audio."
+        "NSMicrophoneUsageDescription": "This app needs access to microphone for voice recording",
+        "NSSpeechRecognitionUsageDescription": "This app needs access to speech recognition for voice input"
       }
     },
     "android": {
@@ -24,7 +25,8 @@
         "backgroundColor": "#ffffff"
       },
       "permissions": [
-        "RECORD_AUDIO"
+        "RECORD_AUDIO",
+        "INTERNET"
       ]
     },
     "web": {
