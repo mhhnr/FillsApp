@@ -1,5 +1,3 @@
-
-
 import { View, Text, Image } from 'react-native';
 import React, { useEffect } from 'react';
 import { Dimensions } from 'react-native';
@@ -75,7 +73,6 @@ export default function Login() {
         {/* Title of the Form */}
         <Text style={{
           fontSize: 24,
-          fontFamily: 'outfit-bold',
           color: '#000',
           marginBottom: 15,
           textAlign: 'center'
@@ -84,7 +81,6 @@ export default function Login() {
         {/* Description of the Form */}
         <Text style={{
           fontSize: 16,
-          fontFamily: 'outfit',
           color: '#666',
           marginBottom: 20,
           textAlign: 'center'
@@ -104,7 +100,6 @@ export default function Login() {
           <Text style={{
             color: '#fff', // Text color
             fontSize: 16,
-            fontFamily: 'outfit-medium',
             textAlign: 'center'
           }}>Get Started</Text>
         </TouchableOpacity>

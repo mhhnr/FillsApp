@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
 import { TEMPLATE_COMPONENTS, getTemplateComponent, getTemplateDetails } from '../../components/templates';
 import { getTemplateIcon } from '../../utils/templateUtils';
+import { AppIcons } from '../../utils/icons';
+import BackButton from '../../components/BackButton';
 
 export default function Templates() {
   const router = useRouter();
@@ -43,11 +44,7 @@ export default function Templates() {
                 onPress={() => handleTemplateSelect(key)}
               >
                 <View style={styles.cardIcon}>
-                  <Ionicons 
-                    name={getTemplateIcon(details.type)}
-                    size={24} 
-                    color="#007AFF" 
-                  />
+                  <Text style={styles.icon}>{AppIcons.document}</Text>
                 </View>
                 <View style={styles.cardContent}>
                   <Text style={styles.templateTitle}>{details.title}</Text>
@@ -55,7 +52,7 @@ export default function Templates() {
                     {details.description}
                   </Text>
                 </View>
-                <Ionicons name="chevron-forward" size={24} color="#666" />
+                <Text style={styles.chevronIcon}>{AppIcons.back}</Text>
               </TouchableOpacity>
             );
           })}
@@ -63,12 +60,7 @@ export default function Templates() {
       ) : (
         <>
           <View style={styles.selectedHeader}>
-            <TouchableOpacity
-              style={styles.backButton}
-              onPress={() => setSelectedTemplate(null)}
-            >
-              <Ionicons name="arrow-back" size={24} color="#000" />
-            </TouchableOpacity>
+            <BackButton />
             <Text style={styles.selectedTitle}>
               {getTemplateDetails(selectedTemplate).title}
             </Text>
@@ -82,7 +74,7 @@ export default function Templates() {
             style={styles.fillButton}
             onPress={handleFillForm}
           >
-            <Ionicons name="create-outline" size={24} color="#FFFFFF" />
+            <Text style={styles.icon}>{AppIcons.edit}</Text>
             <Text style={styles.fillButtonText}>Fill Form</Text>
           </TouchableOpacity>
         </>
@@ -102,7 +94,6 @@ const styles = StyleSheet.create({
     borderBottomColor: '#E0E0E0',
   },
   title: {
-    fontFamily: 'outfit-medium',
     fontSize: 24,
   },
   scrollView: {
@@ -134,12 +125,10 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   templateTitle: {
-    fontFamily: 'outfit-medium',
     fontSize: 16,
     marginBottom: 4,
   },
   templateDescription: {
-    fontFamily: 'outfit-regular',
     fontSize: 14,
     color: '#666666',
   },
@@ -150,12 +139,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#E0E0E0',
   },
-  backButton: {
-    marginRight: 16,
-  },
   selectedTitle: {
-    fontFamily: 'outfit-medium',
     fontSize: 18,
+    marginLeft: 16,
+    flex: 1,
   },
   fillButton: {
     position: 'absolute',
@@ -169,12 +156,10 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   fillButtonText: {
-    fontFamily: 'outfit-medium',
     fontSize: 16,
     color: '#FFFFFF',
   },
   loadingText: {
-    fontFamily: 'outfit-regular',
     fontSize: 16,
     color: '#666666',
     textAlign: 'center',
@@ -184,14 +169,12 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   errorText: {
-    fontFamily: 'outfit-regular',
     fontSize: 16,
     color: 'red',
     textAlign: 'center',
     marginTop: 20,
   },
   emptyText: {
-    fontFamily: 'outfit-regular',
     fontSize: 16,
     color: '#666666',
     textAlign: 'center',
@@ -200,5 +183,13 @@ const styles = StyleSheet.create({
   templateContent: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-  }
+  },
+  icon: {
+    fontSize: 24,
+    color: '#007AFF',
+  },
+  chevronIcon: {
+    fontSize: 24,
+    color: '#666',
+  },
 }); 

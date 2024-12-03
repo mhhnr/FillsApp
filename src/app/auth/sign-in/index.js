@@ -3,9 +3,9 @@ import React, { useEffect, useRef, useMemo, useState } from 'react';
 import { useAppFonts } from '../../../utils/fonts';
 import { useRouter } from 'expo-router';
 import { useNavigation } from '@react-navigation/native';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../../configs/FirebaseConfig';
+import { AppIcons } from '../../../utils/icons';
 
 /**
  * SignIn Function Component
@@ -111,7 +111,7 @@ export default function SignIn() {
                 style={styles.backButton} 
                 onPress={() => navigation.goBack()} // Navigate back on press
             >
-                <Ionicons name="arrow-back-circle-outline" size={24} color="black" />
+                <Text style={styles.icon}>{AppIcons.back}</Text>
             </TouchableOpacity>
             <Animated.View style={[styles.content, { opacity: fadeAnim, transform: [{ translateY: slideAnim }] }]}>
                 <Text style={styles.title}>Welcome Back</Text>
@@ -177,6 +177,10 @@ const styles = StyleSheet.create({
         top: height * 0.05,
         left: width * 0.05,
         zIndex: 1, // Ensure the button is above other elements
+    },
+    icon: {
+        fontSize: 24,
+        color: 'black',
     },
     content: {
         width: '100%',

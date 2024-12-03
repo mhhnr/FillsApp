@@ -17,7 +17,8 @@
       "infoPlist": {
         "NSMicrophoneUsageDescription": "This app needs access to microphone for voice recording",
         "NSSpeechRecognitionUsageDescription": "This app needs access to speech recognition for voice input"
-      }
+      },
+      "bundleIdentifier": "com.fills.FillsApp"
     },
     "android": {
       "adaptiveIcon": {
@@ -26,8 +27,10 @@
       },
       "permissions": [
         "RECORD_AUDIO",
-        "INTERNET"
-      ]
+        "INTERNET",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.fills.FillsApp"
     },
     "web": {
       "bundler": "metro",
@@ -41,26 +44,11 @@
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
           "speechRecognitionPermission": "Allow $(PRODUCT_NAME) to access speech recognition"
         }
-      ],
-      "expo-font"
+      ]
     ],
     "experiments": {
       "typedRoutes": true
     },
-    "fonts": [
-      {
-        "asset": "./assets/fonts/Outfit-Regular.ttf",
-        "family": "outfit-regular"
-      },
-      {
-        "asset": "./assets/fonts/Outfit-Medium.ttf",
-        "family": "outfit-medium"
-      },
-      {
-        "asset": "./assets/fonts/Outfit-Bold.ttf",
-        "family": "outfit-bold"
-      }
-    ],
     "assetBundlePatterns": [
       "**/*"
     ]

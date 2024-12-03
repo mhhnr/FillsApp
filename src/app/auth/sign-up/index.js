@@ -3,9 +3,9 @@ import React, { useEffect, useRef, useMemo, useState } from 'react';
 import { useAppFonts } from '../../../utils/fonts';
 import { useRouter } from 'expo-router';
 import { useNavigation } from '@react-navigation/native';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../../configs/FirebaseConfig';
+import { AppIcons } from '../../../utils/icons';
 
 /**
  * SignUp Function Component
@@ -161,7 +161,7 @@ export default function SignUp() {
                 style={styles.backButton} 
                 onPress={() => navigation.goBack()} // Navigate back to the previous screen
             >
-                <Ionicons name="arrow-back-circle-outline" size={24} color="black" />
+                <Text style={styles.icon}>{AppIcons.back}</Text>
             </TouchableOpacity>
             <Animated.ScrollView 
                 style={[{ opacity: fadeAnim, transform: [{ translateY: slideAnim }] }]}
@@ -262,6 +262,10 @@ const styles = StyleSheet.create({
         top: height * 0.05,
         left: width * 0.05,
         zIndex: 1,
+    },
+    icon: {
+        fontSize: 24,
+        color: 'black',
     },
     content: {
         flexGrow: 1,

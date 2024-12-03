@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Switch } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { Menu, MenuItem } from 'react-native-material-menu';
+import { AppIcons } from '../utils/icons';
 
 export default function FormFieldEditor({ field, onUpdate, onDelete, onDuplicate, onMoveUp, onMoveDown }) {
   const [showMenu, setShowMenu] = useState(false);
@@ -14,11 +14,9 @@ export default function FormFieldEditor({ field, onUpdate, onDelete, onDuplicate
           <View style={styles.optionsContainer}>
             {field.options.map((option, index) => (
               <View key={`option-${field.id}-${index}`} style={styles.optionRow}>
-                <Ionicons 
-                  name={field.type === 'multiple_choice' ? 'radio-button-off' : 'square-outline'} 
-                  size={24} 
-                  color="#666666" 
-                />
+                <Text style={styles.icon}>
+                  {field.type === 'multiple_choice' ? AppIcons.radio : AppIcons.checkbox}
+                </Text>
                 <TextInput
                   style={styles.optionInput}
                   value={option}
@@ -35,7 +33,7 @@ export default function FormFieldEditor({ field, onUpdate, onDelete, onDuplicate
                     const newOptions = field.options.filter((_, i) => i !== index);
                     onUpdate(field.id, { ...field, options: newOptions });
                   }}>
-                    <Ionicons name="remove-circle-outline" size={24} color="#FF0000" />
+                    <Text style={styles.icon}>{AppIcons.remove}</Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -48,7 +46,7 @@ export default function FormFieldEditor({ field, onUpdate, onDelete, onDuplicate
                   onUpdate(field.id, { ...field, options: newOptions });
                 }}
               >
-                <Ionicons name="add-circle-outline" size={24} color="#000000" />
+                <Text style={styles.icon}>{AppIcons.add}</Text>
                 <Text style={styles.addOptionText}>Add Option</Text>
               </TouchableOpacity>
             )}
@@ -95,11 +93,7 @@ export default function FormFieldEditor({ field, onUpdate, onDelete, onDuplicate
     <View style={styles.container}>
       <View style={styles.fieldHeader}>
         <View style={styles.fieldTypeContainer}>
-          <Ionicons 
-            name={getIconForFieldType(field.type)} 
-            size={24} 
-            color="#666666" 
-          />
+          <Text style={styles.icon}>{getIconForFieldType(field.type)}</Text>
           <Text style={styles.fieldType}>
             {formatFieldType(field.type)}
           </Text>
@@ -107,7 +101,7 @@ export default function FormFieldEditor({ field, onUpdate, onDelete, onDuplicate
         
         <View style={styles.fieldActions}>
           <TouchableOpacity onPress={() => setShowMenu(true)}>
-            <Ionicons name="ellipsis-vertical" size={24} color="#666666" />
+            <Text style={styles.icon}>{AppIcons.menu}</Text>
           </TouchableOpacity>
           
           <Menu
@@ -298,20 +292,24 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     textAlign: 'center',
   },
+  icon: {
+    fontSize: 24,
+    color: '#666666',
+  },
 });
 
 // Helper functions
 const getIconForFieldType = (type) => {
   const icons = {
-    short_text: 'text-outline',
-    long_text: 'document-text-outline',
-    multiple_choice: 'radio-button-on-outline',
-    checkbox: 'checkbox-outline',
-    date: 'calendar-outline',
-    time: 'time-outline',
-    scale: 'options-outline',
+    short_text: AppIcons.text,
+    long_text: AppIcons.document,
+    multiple_choice: AppIcons.radio,
+    checkbox: AppIcons.checkbox,
+    date: AppIcons.calendar,
+    time: AppIcons.clock,
+    scale: AppIcons.options,
   };
-  return icons[type] || 'help-outline';
+  return icons[type] || AppIcons.help;
 };
 
 const formatFieldType = (type) => {

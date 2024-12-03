@@ -129,13 +129,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   hospitalName: {
-    fontFamily: 'outfit-bold',
     fontSize: 18,
     marginBottom: 4,
     color: '#CC0000',
   },
   hospitalSubName: {
-    fontFamily: 'outfit-medium',
     fontSize: 16,
     marginBottom: 2,
     color: '#CC0000',
@@ -146,7 +144,6 @@ const styles = StyleSheet.create({
     borderBottomColor: '#E0E0E0',
   },
   sectionTitle: {
-    fontFamily: 'outfit-medium',
     fontSize: 16,
     marginBottom: 12,
     color: '#CC0000',
@@ -160,7 +157,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   label: {
-    fontFamily: 'outfit-medium',
     fontSize: 14,
     marginBottom: 4,
   },
@@ -169,7 +165,6 @@ const styles = StyleSheet.create({
     borderColor: '#E0E0E0',
     borderRadius: 8,
     padding: 8,
-    fontFamily: 'outfit-regular',
   },
   textArea: {
     height: 100,

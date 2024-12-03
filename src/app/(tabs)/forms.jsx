@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
 import { getTemplateIcon } from '../../utils/templateUtils';
 import { getTemplateDetails } from '../../components/templates';
 import { useFormDataContext } from '../../contexts/FormDataContext';
+import { AppIcons } from '../../utils/icons';
 
 export default function Forms() {
   const router = useRouter();
@@ -85,11 +85,7 @@ export default function Forms() {
                 onPress={() => handleFormPress(form.formId)}
               >
                 <View style={styles.formHeader}>
-                  <Ionicons 
-                    name={getTemplateIcon(form.templateCode)} 
-                    size={24} 
-                    color="#007AFF" 
-                  />
+                  <Text style={styles.icon}>{AppIcons.document}</Text>
                   <View style={styles.formInfo}>
                     <Text style={styles.patientName}>{patientName}</Text>
                     <Text style={styles.formType}>
@@ -106,9 +102,9 @@ export default function Forms() {
                       style={styles.deleteButton}
                       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     >
-                      <Ionicons name="trash-outline" size={22} color="#FF3B30" />
+                      <Text style={styles.deleteIcon}>{AppIcons.delete}</Text>
                     </TouchableOpacity>
-                    <Ionicons name="chevron-forward" size={24} color="#666666" />
+                    <Text style={styles.chevronIcon}>{AppIcons.back}</Text>
                   </View>
                 </View>
               </TouchableOpacity>
@@ -158,23 +154,19 @@ const styles = StyleSheet.create({
   },
   patientName: {
     fontSize: 16,
-    fontFamily: 'outfit-medium',
     color: '#000000',
   },
   formType: {
     fontSize: 14,
-    fontFamily: 'outfit-regular',
     color: '#666666',
     marginTop: 2,
   },
   formDate: {
     fontSize: 12,
-    fontFamily: 'outfit-regular',
     color: '#999999',
     marginTop: 2,
   },
   emptyText: {
-    fontFamily: 'outfit-regular',
     fontSize: 16,
     color: '#666666',
     textAlign: 'center',
@@ -188,5 +180,17 @@ const styles = StyleSheet.create({
   deleteButton: {
     padding: 8,
     marginRight: 4,
+  },
+  icon: {
+    fontSize: 24,
+    color: '#007AFF',
+  },
+  deleteIcon: {
+    fontSize: 22,
+    color: '#FF3B30',
+  },
+  chevronIcon: {
+    fontSize: 24,
+    color: '#666666',
   },
 }); 

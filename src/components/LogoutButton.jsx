@@ -1,6 +1,6 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { AppIcons } from '../utils/icons';
 
 export default function LogoutButton({ onLogout }) {
   return (
@@ -8,7 +8,7 @@ export default function LogoutButton({ onLogout }) {
       style={styles.button}
       onPress={onLogout}
     >
-      <Ionicons name="log-out-outline" size={24} color="#000" />
+      <Text style={styles.icon}>{AppIcons.logout}</Text>
     </TouchableOpacity>
   );
 }
@@ -18,4 +18,7 @@ const styles = StyleSheet.create({
     padding: 8,
     marginRight: 8,
   },
+  icon: {
+    fontSize: 24,
+  }
 });
