@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Pressable, Animated as RNAnimated, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Pressable, Animated as RNAnimated, ScrollView, KeyboardAvoidingView, Platform, Alert, PermissionsAndroid } from 'react-native'
 import React, { useState, useEffect, useRef } from 'react'
 import Animated, { 
   useAnimatedStyle, 
@@ -15,13 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import SelectionOverlay from '../../components/SelectionOverlay';
 import { useRouter } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-
-let Voice;
-try {
-  Voice = require('@react-native-voice/voice').default;
-} catch (e) {
-  console.log('Voice module not available');
-}
+import Voice from '@react-native-voice/voice';
 
 const WEBSOCKET_URL = 'wss://x474gm0754.execute-api.us-east-1.amazonaws.com/dev';
 const CHAT_STORAGE_KEY = '@chat_history';
@@ -45,6 +39,9 @@ export default function Talk() {
   const [shouldConnect, setShouldConnect] = useState(false);
   const doubleTapRef = useRef(null);
   const transcriptionIntervalRef = useRef(null);
+  const [isListening, setIsListening] = useState(false);
+  const [recognizedText, setRecognizedText] = useState('');
+  const [hasPermission, setHasPermission] = useState(false);
 
   // Single WebSocket connection when component mounts
   useEffect(() => {
@@ -113,27 +110,143 @@ export default function Talk() {
     };
   }, []);
 
+  useEffect(() => {
+    checkPermission();
+
+    Voice.onSpeechStart = onSpeechStart;
+    Voice.onSpeechRecognized = onSpeechRecognized;
+    Voice.onSpeechEnd = onSpeechEnd;
+    Voice.onSpeechError = onSpeechError;
+    Voice.onSpeechResults = onSpeechResults;
+
+    return () => {
+      Voice.destroy().then(Voice.removeAllListeners);
+    };
+  }, []);
+
+  const checkPermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+          {
+            title: 'Microphone Permission',
+            message: 'This app needs access to your microphone to transcribe speech.',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          }
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          setHasPermission(true);
+        } else {
+          setHasPermission(false);
+          Alert.alert(
+            'Permission Denied',
+            'You need to grant microphone permission to use voice recognition.'
+          );
+        }
+      } catch (err) {
+        console.warn(err);
+        setHasPermission(false);
+      }
+    } else {
+      setHasPermission(true);
+    }
+  };
+
+  const onSpeechStart = () => {
+    console.log('Speech started');
+  };
+
+  const onSpeechRecognized = () => {
+    console.log('Speech recognized');
+  };
+
+  const onSpeechEnd = () => {
+    setIsListening(false);
+    console.log('Speech ended');
+  };
+
+  const onSpeechError = (error) => {
+    console.log('Speech error:', error);
+    setIsListening(false);
+    if (Platform.OS === 'android') {
+      switch (error.error.message) {
+        case '7':
+          Alert.alert('Error', 'No speech was recognized. Please try again.');
+          break;
+        case '9':
+          Alert.alert('Error', 'Permission denied. Please enable microphone permission.');
+          break;
+        default:
+          Alert.alert('Error', 'Something went wrong. Please try again.');
+      }
+    }
+  };
+
+  const onSpeechResults = (event) => {
+    const text = event.value[0];
+    setRecognizedText(text);
+    console.log('Speech results:', text);
+  };
+
+  const startListening = async () => {
+    if (!hasPermission) {
+      await checkPermission();
+      if (!hasPermission) return;
+    }
+
+    try {
+      await Voice.start('en-US');
+      setIsListening(true);
+    } catch (error) {
+      console.error('Error starting voice:', error);
+      Alert.alert(
+        'Error',
+        'Failed to start voice recognition. Please try again.'
+      );
+    }
+  };
+
+  const stopListening = async () => {
+    try {
+      await Voice.stop();
+      setIsListening(false);
+    } catch (error) {
+      console.error('Error stopping voice:', error);
+    }
+  };
+
+  const toggleListening = () => {
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
+    }
+  };
+
   const handleInputChange = (text) => {
     setInputMessage(text);
   };
 
   const handleSend = async () => {
-    if (inputMessage.trim() === '') return;
+    if (recognizedText.trim() === '') return;
 
     const newMessage = {
       id: Date.now().toString(),
-      text: inputMessage,
+      text: recognizedText,
       isUser: true,
       timestamp: new Date().toISOString()
     };
 
     setMessages(prev => [...prev, newMessage]);
-    setInputMessage('');
+    setRecognizedText('');
 
     if (wsRef.current?.readyState === WebSocket.OPEN) {
       wsRef.current.send(JSON.stringify({
         action: 'sendMessage',
-        message: inputMessage
+        message: recognizedText
       }));
     }
   };
@@ -301,50 +414,35 @@ export default function Talk() {
               <TextInput
                 ref={inputRef}
                 style={styles.input}
-                value={inputMessage}
-                onChangeText={handleInputChange}
+                value={recognizedText}
+                onChangeText={setRecognizedText}
                 placeholder="Type a message..."
                 multiline
                 autoFocus={true}
               />
-              <TapGestureHandler
-                ref={doubleTapRef}
-                numberOfTaps={2}
-                onActivated={handleDoubleTap}
-                maxDelayMs={250}
-              >
-                <Animated.View>
-                  <TouchableOpacity
-                    style={[
-                      styles.iconButton,
-                      isRecording && styles.recordingButton
-                    ]}
-                    onPressIn={handleMicPressIn}
-                    onPressOut={handleMicPressOut}
-                    activeOpacity={0.7}
-                  >
-                    <Text style={[
-                      styles.sendIcon,
-                      isRecording && styles.recordingIcon
-                    ]}>
-                      {isRecording ? '🔴' : AppIcons.microphone}
-                    </Text>
-                    {isLocked && isRecording && (
-                      <View style={styles.lockedIndicator}>
-                        <Text style={styles.lockedText}>🔒</Text>
-                      </View>
-                    )}
-                  </TouchableOpacity>
-                </Animated.View>
-              </TapGestureHandler>
               <TouchableOpacity
-                style={[styles.iconButton, !inputMessage.trim() && styles.disabledButton]}
-                onPress={handleSend}
-                disabled={!inputMessage.trim()}
+                style={[
+                  styles.iconButton,
+                  isListening && styles.recordingButton
+                ]}
+                onPress={toggleListening}
+                activeOpacity={0.7}
               >
                 <Text style={[
                   styles.sendIcon,
-                  {color: inputMessage.trim() ? "#007AFF" : "#999"}
+                  isListening && styles.recordingIcon
+                ]}>
+                  {isListening ? '🔴' : AppIcons.microphone}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.iconButton, !recognizedText.trim() && styles.disabledButton]}
+                onPress={handleSend}
+                disabled={!recognizedText.trim()}
+              >
+                <Text style={[
+                  styles.sendIcon,
+                  {color: recognizedText.trim() ? "#007AFF" : "#999"}
                 ]}>
                   {AppIcons.send}
                 </Text>

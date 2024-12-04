@@ -31,6 +31,15 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
+          name="transcribe"
+          options={{
+            title: "Transcribe",
+            tabBarIcon: ({ color }) => (
+              <Text style={{ color, fontSize: 24 }}>{AppIcons.microphone}</Text>
+            ),
+          }}
+        />
+        <Tabs.Screen
           name="templates"
           options={{
             title: "Templates",
