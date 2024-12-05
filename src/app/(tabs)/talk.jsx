@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Pressable, Animated as RNAnimated, ScrollView, KeyboardAvoidingView, Platform, Alert, PermissionsAndroid } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Pressable, Animated as RNAnimated, ScrollView, KeyboardAvoidingView, Platform, Alert, PermissionsAndroid, Switch } from 'react-native'
 import React, { useState, useEffect, useRef } from 'react'
 import Animated, { 
   useAnimatedStyle, 
@@ -42,6 +42,7 @@ export default function Talk() {
   const [isListening, setIsListening] = useState(false);
   const [recognizedText, setRecognizedText] = useState('');
   const [hasPermission, setHasPermission] = useState(false);
+  const [allowResponses, setAllowResponses] = useState(true);
 
   // Single WebSocket connection when component mounts
   useEffect(() => {
@@ -68,15 +69,27 @@ export default function Talk() {
       };
 
       wsRef.current.onmessage = (event) => {
-        const response = JSON.parse(event.data);
-        if (response.message) {
-          const newMessage = {
-            id: Date.now().toString(),
-            text: response.message,
-            isUser: false,
-            timestamp: new Date().toISOString()
-          };
-          setMessages(prev => [...prev, newMessage]);
+        try {
+          // Check if event.data is empty or invalid
+          if (!event.data || event.data.trim() === '') {
+            return; // Silently ignore empty messages
+          }
+          
+          const response = JSON.parse(event.data);
+          if (response.message) {
+            const newMessage = {
+              id: Date.now().toString(),
+              text: response.message,
+              isUser: false,
+              timestamp: new Date().toISOString()
+            };
+            setMessages(prev => [...prev, newMessage]);
+          }
+        } catch (error) {
+          // Only log in development, not in production
+          if (__DEV__) {
+            console.log('Received invalid WebSocket message:', event.data);
+          }
         }
       };
 
@@ -243,13 +256,27 @@ export default function Talk() {
     setMessages(prev => [...prev, newMessage]);
     setRecognizedText('');
 
-    if (wsRef.current?.readyState === WebSocket.OPEN) {
+    // Scroll to bottom after sending message
+    setTimeout(() => {
+      scrollViewRef.current?.scrollToEnd({ animated: true });
+    }, 100);
+
+    if (allowResponses && wsRef.current?.readyState === WebSocket.OPEN) {
       wsRef.current.send(JSON.stringify({
         action: 'sendMessage',
         message: recognizedText
       }));
     }
   };
+
+  // Add this effect to handle auto-scrolling when receiving messages
+  useEffect(() => {
+    if (messages.length > 0) {
+      setTimeout(() => {
+        scrollViewRef.current?.scrollToEnd({ animated: true });
+      }, 100);
+    }
+  }, [messages]);
 
   const handleLongPress = (messageId) => {
     setSelectedMessages([messageId]);
@@ -361,9 +388,20 @@ export default function Talk() {
     }
   };
 
+  const handleToggleResponses = () => {
+    setAllowResponses(prev => !prev);
+  };
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
+        <View style={styles.toggleContainer}>
+          <Text>Allow Responses:</Text>
+          <Switch
+            value={allowResponses}
+            onValueChange={handleToggleResponses}
+          />
+        </View>
         <KeyboardAvoidingView 
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={{ flex: 1 }}
@@ -382,6 +420,7 @@ export default function Talk() {
               ref={scrollViewRef}
               style={styles.messageContainer}
               contentContainerStyle={styles.messageContent}
+              onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}
             >
               {messages.map((msg, index) => (
                 <TouchableOpacity
@@ -568,5 +607,14 @@ const styles = StyleSheet.create({
   lockedText: {
     fontSize: 12,
     color: '#FFFFFF',
+  },
+  toggleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+    backgroundColor: '#FFFFFF',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
   },
 });

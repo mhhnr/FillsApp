@@ -44,9 +44,9 @@
       <true/>
     </dict>
     <key>NSMicrophoneUsageDescription</key>
-    <string>This app needs access to the microphone to transcribe your speech.</string>
+    <string>Allow $(PRODUCT_NAME) to access your microphone</string>
     <key>NSSpeechRecognitionUsageDescription</key>
-    <string>This app needs access to speech recognition to transcribe your voice into text.</string>
+    <string>Allow $(PRODUCT_NAME) to access speech recognition</string>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>
