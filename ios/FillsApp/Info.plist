@@ -28,7 +28,7 @@
         <key>CFBundleURLSchemes</key>
         <array>
           <string>myapp</string>
-          <string>com.fills.FillsApp</string>
+          <string>com.hari.FillsApp</string>
         </array>
       </dict>
     </array>
@@ -47,6 +47,12 @@
     <string>Allow $(PRODUCT_NAME) to access your microphone</string>
     <key>NSSpeechRecognitionUsageDescription</key>
     <string>Allow $(PRODUCT_NAME) to access speech recognition</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>We need access to your photo library to save and upload medical documents and forms.</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>We need access to save medical documents and forms to your photo library.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>We need camera access to scan medical documents and forms.</string>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>

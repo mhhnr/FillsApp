@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Pressable, Animated as RNAnimated, ScrollView, KeyboardAvoidingView, Platform, Alert, PermissionsAndroid, Switch } from 'react-native'
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import Animated, { 
   useAnimatedStyle, 
   withSpring,
@@ -391,6 +391,19 @@ export default function Talk() {
   const handleToggleResponses = () => {
     setAllowResponses(prev => !prev);
   };
+
+  // Memoize callbacks
+  const handleSendMessage = useCallback(() => {
+    if (recognizedText.trim()) {
+      setMessages(prev => [...prev, { text: recognizedText.trim(), sender: 'user' }]);
+      setRecognizedText('');
+    }
+  }, [recognizedText]);
+
+  // Memoize expensive computations
+  const sortedMessages = useMemo(() => {
+    return messages.sort((a, b) => b.timestamp - a.timestamp);
+  }, [messages]);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

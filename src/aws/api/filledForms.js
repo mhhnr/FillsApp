@@ -6,6 +6,10 @@ export const filledFormsService = {
   async getFilledForms() {
     try {
       const token = await auth.currentUser?.getIdToken();
+      if (!token) {
+        throw new Error('No authentication token available');
+      }
+      
       console.log('[FilledFormsService] Getting forms...');
       
       const url = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.FILLED_FORMS.GET}`;
@@ -31,6 +35,9 @@ export const filledFormsService = {
       return forms;
     } catch (error) {
       console.error('[FilledFormsService] Error:', error);
+      if (error.response?.status === 401) {
+        throw new Error('Authentication expired. Please login again.');
+      }
       throw error;
     }
   },
@@ -116,4 +123,20 @@ export const filledFormsService = {
       throw error;
     }
   }
+};
+
+const handleApiError = (error, defaultMessage = 'An error occurred') => {
+  if (error.response) {
+    switch (error.response.status) {
+      case 401:
+        throw new Error('Please login again');
+      case 403:
+        throw new Error('You do not have permission to perform this action');
+      case 404:
+        throw new Error('The requested resource was not found');
+      default:
+        throw new Error(error.response.data?.message || defaultMessage);
+    }
+  }
+  throw error;
 };

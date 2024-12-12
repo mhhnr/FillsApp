@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { getTemplateIcon } from '../../utils/templateUtils';
@@ -10,6 +10,7 @@ export default function Forms() {
   const router = useRouter();
   const { forms, getForms, loading, deleteForm } = useFormDataContext();
   const { refresh } = useLocalSearchParams();
+  const [deletingId, setDeletingId] = useState(null);
 
   useEffect(() => {
     console.log('Forms component mounted or refresh triggered');
@@ -28,36 +29,12 @@ export default function Forms() {
   };
 
   const handleDelete = async (formId) => {
-    Alert.alert(
-      "Delete Form",
-      "Are you sure you want to delete this form?",
-      [
-        {
-          text: "Cancel",
-          style: "cancel"
-        },
-        {
-          text: "Delete",
-          style: "destructive",
-          onPress: async () => {
-            try {
-              console.log('Attempting to delete form:', formId);
-              await deleteForm(formId);
-              console.log('Form deleted successfully');
-              // Refresh the forms list
-              getForms();
-            } catch (error) {
-              console.error('Delete error:', error);
-              Alert.alert(
-                "Error",
-                `Failed to delete form: ${error.message || 'Unknown error'}`,
-                [{ text: "OK" }]
-              );
-            }
-          }
-        }
-      ]
-    );
+    try {
+      setDeletingId(formId);
+      await deleteForm(formId);
+    } finally {
+      setDeletingId(null);
+    }
   };
 
   if (loading) {

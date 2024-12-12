@@ -18,7 +18,7 @@
         "NSMicrophoneUsageDescription": "This app needs access to microphone for voice recording",
         "NSSpeechRecognitionUsageDescription": "This app needs access to speech recognition for voice input"
       },
-      "bundleIdentifier": "com.fills.FillsApp"
+      "bundleIdentifier": "com.hari.FillsApp"
     },
     "android": {
       "adaptiveIcon": {
@@ -30,7 +30,7 @@
         "INTERNET",
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.fills.FillsApp"
+      "package": "com.hari.FillsApp"
     },
     "web": {
       "bundler": "metro",
@@ -51,6 +51,11 @@
     },
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "82a95f45-e940-4d5e-aa20-438dab4c606b"
+      }
+    }
   }
 }
