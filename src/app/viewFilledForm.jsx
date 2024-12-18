@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, Alert, SafeAreaView, Text, ScrollView } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
 import { getTemplateComponent } from '../components/templates';
 import { generateAndSharePDF } from '../utils/pdfGenerator';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFormDataContext } from '../contexts/FormDataContext';
+import { Stack } from 'expo-router';
+import BackButton from '../components/BackButton';
+import { AppIcons } from '../utils/icons';
 
 export default function ViewFilledForm() {
   const { formId } = useLocalSearchParams();
@@ -46,7 +48,7 @@ export default function ViewFilledForm() {
             style={styles.backButton}
             onPress={() => router.back()}
           >
-            <Ionicons name="arrow-back" size={24} color="#000000" />
+            <Text style={styles.icon}>{AppIcons.back}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.contentContainer}>
@@ -64,7 +66,7 @@ export default function ViewFilledForm() {
             style={styles.backButton}
             onPress={() => router.back()}
           >
-            <Ionicons name="arrow-back" size={24} color="#000000" />
+            <Text style={styles.icon}>{AppIcons.back}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.contentContainer}>
@@ -77,29 +79,37 @@ export default function ViewFilledForm() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={[styles.header, { marginTop: insets.top }]}>
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={24} color="#000000" />
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.shareButton}
-          onPress={handleShare}
-        >
-          <Ionicons name="share-outline" size={24} color="#000000" />
-        </TouchableOpacity>
-      </View>
-      <ScrollView style={styles.contentContainer}>
-        <TemplateComponent 
-          data={filledForm.data}
-          readOnly={true}
-          isTemplate={false}
-        />
-      </ScrollView>
-    </SafeAreaView>
+    <>
+      <Stack.Screen
+        options={{
+          title: 'Filled Form',
+          headerLeft: () => <BackButton />,
+        }}
+      />
+      <SafeAreaView style={styles.container}>
+        <View style={[styles.header, { marginTop: insets.top }]}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <Text style={styles.icon}>{AppIcons.back}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.shareButton}
+            onPress={handleShare}
+          >
+            <Text style={styles.icon}>{AppIcons.share}</Text>
+          </TouchableOpacity>
+        </View>
+        <ScrollView style={styles.contentContainer}>
+          <TemplateComponent 
+            data={filledForm.data}
+            readOnly={true}
+            isTemplate={false}
+          />
+        </ScrollView>
+      </SafeAreaView>
+    </>
   );
 }
 
@@ -117,6 +127,10 @@ const styles = StyleSheet.create({
   },
   backButton: {
     padding: 8,
+  },
+  icon: {
+    fontSize: 24,
+    color: '#000000',
   },
   headerTitle: {
     flex: 1,

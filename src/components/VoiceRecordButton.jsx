@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { TouchableOpacity, StyleSheet, ActivityIndicator, Text } from 'react-native';
+import { AppIcons } from '../utils/icons';
 
 export default function VoiceRecordButton({ isRecording, onPress }) {
   return (
@@ -11,7 +11,9 @@ export default function VoiceRecordButton({ isRecording, onPress }) {
       {isRecording ? (
         <ActivityIndicator color="#FFFFFF" />
       ) : (
-        <Ionicons name="mic" size={24} color={isRecording ? "#FFFFFF" : "#000000"} />
+        <Text style={[styles.icon, isRecording && styles.recordingIcon]}>
+          {AppIcons.mic}
+        </Text>
       )}
     </TouchableOpacity>
   );
@@ -37,4 +39,11 @@ const styles = StyleSheet.create({
   recording: {
     backgroundColor: '#FF3B30',
   },
+  icon: {
+    fontSize: 24,
+    color: '#000000',
+  },
+  recordingIcon: {
+    color: '#FFFFFF',
+  }
 }); 

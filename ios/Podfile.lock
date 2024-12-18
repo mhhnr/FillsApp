@@ -41,6 +41,10 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - ExpoPrint (13.0.1):
+    - ExpoModulesCore
+  - ExpoSharing (12.0.1):
+    - ExpoModulesCore
   - ExpoSpeech (12.0.2):
     - ExpoModulesCore
   - ExpoSpeechRecognition (0.2.24):
@@ -1005,6 +1009,8 @@ PODS:
   - React-Mapbuffer (0.74.5):
     - glog
     - React-debug
+  - react-native-html-to-pdf (0.12.0):
+    - React-Core
   - react-native-safe-area-context (4.10.5):
     - React-Core
   - react-native-voice (3.2.4):
@@ -1238,6 +1244,12 @@ PODS:
     - React-logger (= 0.74.5)
     - React-perflogger (= 0.74.5)
     - React-utils (= 0.74.5)
+  - ReactNativeAudioToolkit (2.0.3):
+    - React
+  - RNCAsyncStorage (2.0.0):
+    - React-Core
+  - RNCPicker (2.7.5):
+    - React-Core
   - RNGestureHandler (2.16.2):
     - DoubleConversion
     - glog
@@ -1259,6 +1271,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - RNPermissions (5.2.1):
+    - React-Core
   - RNReanimated (3.10.1):
     - DoubleConversion
     - glog
@@ -1302,26 +1316,49 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - RNShare (12.0.3):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - SocketRocket (0.7.0)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
-  - EXAV (from `../node_modules/expo-av/ios`)
-  - EXConstants (from `../node_modules/expo-constants/ios`)
-  - Expo (from `../node_modules/expo`)
-  - ExpoAsset (from `../node_modules/expo-asset/ios`)
-  - ExpoFileSystem (from `../node_modules/expo-file-system/ios`)
-  - ExpoFont (from `../node_modules/expo-font/ios`)
-  - ExpoHead (from `../node_modules/expo-router/ios`)
-  - ExpoKeepAwake (from `../node_modules/expo-keep-awake/ios`)
-  - ExpoModulesCore (from `../node_modules/expo-modules-core`)
-  - ExpoSpeech (from `../node_modules/expo-speech/ios`)
-  - ExpoSpeechRecognition (from `../node_modules/expo-speech-recognition/ios`)
-  - ExpoSystemUI (from `../node_modules/expo-system-ui/ios`)
-  - ExpoWebBrowser (from `../node_modules/expo-web-browser/ios`)
-  - EXSplashScreen (from `../node_modules/expo-splash-screen/ios`)
+  - "EXAV (from `../node_modules/.pnpm/expo-av@14.0.7_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0__/node_modules/expo-av/ios`)"
+  - "EXConstants (from `../node_modules/.pnpm/expo-constants@16.0.2_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0__/node_modules/expo-constants/ios`)"
+  - "Expo (from `../node_modules/.pnpm/expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0_/node_modules/expo`)"
+  - "ExpoAsset (from `../node_modules/.pnpm/expo-asset@10.0.10_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0__/node_modules/expo-asset/ios`)"
+  - "ExpoFileSystem (from `../node_modules/.pnpm/expo-file-system@17.0.1_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0__/node_modules/expo-file-system/ios`)"
+  - "ExpoFont (from `../node_modules/.pnpm/expo-font@12.0.10_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0__/node_modules/expo-font/ios`)"
+  - "ExpoHead (from `../node_modules/.pnpm/expo-router@3.5.23_hlm4dvi52oqwlgil4l5a6hc3zu/node_modules/expo-router/ios`)"
+  - "ExpoKeepAwake (from `../node_modules/.pnpm/expo-keep-awake@13.0.2_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0__/node_modules/expo-keep-awake/ios`)"
+  - "ExpoModulesCore (from `../node_modules/.pnpm/expo-modules-core@1.12.26/node_modules/expo-modules-core`)"
+  - "ExpoPrint (from `../node_modules/.pnpm/expo-print@13.0.1_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0__/node_modules/expo-print/ios`)"
+  - "ExpoSharing (from `../node_modules/.pnpm/expo-sharing@12.0.1_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0__/node_modules/expo-sharing/ios`)"
+  - "ExpoSpeech (from `../node_modules/.pnpm/expo-speech@12.0.2_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0__/node_modules/expo-speech/ios`)"
+  - "ExpoSpeechRecognition (from `../node_modules/.pnpm/expo-speech-recognition@0.2.24_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babe_wamcdsjuh4fiblonoeinbuiyyi/node_modules/expo-speech-recognition/ios`)"
+  - "ExpoSystemUI (from `../node_modules/.pnpm/expo-system-ui@3.0.7_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0__/node_modules/expo-system-ui/ios`)"
+  - "ExpoWebBrowser (from `../node_modules/.pnpm/expo-web-browser@13.0.3_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0__/node_modules/expo-web-browser/ios`)"
+  - "EXSplashScreen (from `../node_modules/.pnpm/expo-splash-screen@0.27.6_expo-modules-autolinking@1.11.3_expo@51.0.38_@babel+core@7.26.0_@ba_zr7wyixfxjbk67y5yx3etjigom/node_modules/expo-splash-screen/ios`)"
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - fmt (from `../node_modules/react-native/third-party-podspecs/fmt.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
@@ -1352,6 +1389,7 @@ DEPENDENCIES:
   - React-jsitracing (from `../node_modules/react-native/ReactCommon/hermes/executor/`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
+  - react-native-html-to-pdf (from `../node_modules/react-native-html-to-pdf`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-voice (from `../node_modules/@react-native-voice/voice`)"
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
@@ -1377,9 +1415,14 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "ReactNativeAudioToolkit (from `../node_modules/@react-native-community/audio-toolkit`)"
+  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNShare (from `../node_modules/react-native-share`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -1392,33 +1435,37 @@ EXTERNAL SOURCES:
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   EXAV:
-    :path: "../node_modules/expo-av/ios"
+    :path: "../node_modules/.pnpm/expo-av@14.0.7_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0__/node_modules/expo-av/ios"
   EXConstants:
-    :path: "../node_modules/expo-constants/ios"
+    :path: "../node_modules/.pnpm/expo-constants@16.0.2_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0__/node_modules/expo-constants/ios"
   Expo:
-    :path: "../node_modules/expo"
+    :path: "../node_modules/.pnpm/expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0_/node_modules/expo"
   ExpoAsset:
-    :path: "../node_modules/expo-asset/ios"
+    :path: "../node_modules/.pnpm/expo-asset@10.0.10_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0__/node_modules/expo-asset/ios"
   ExpoFileSystem:
-    :path: "../node_modules/expo-file-system/ios"
+    :path: "../node_modules/.pnpm/expo-file-system@17.0.1_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0__/node_modules/expo-file-system/ios"
   ExpoFont:
-    :path: "../node_modules/expo-font/ios"
+    :path: "../node_modules/.pnpm/expo-font@12.0.10_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0__/node_modules/expo-font/ios"
   ExpoHead:
-    :path: "../node_modules/expo-router/ios"
+    :path: "../node_modules/.pnpm/expo-router@3.5.23_hlm4dvi52oqwlgil4l5a6hc3zu/node_modules/expo-router/ios"
   ExpoKeepAwake:
-    :path: "../node_modules/expo-keep-awake/ios"
+    :path: "../node_modules/.pnpm/expo-keep-awake@13.0.2_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0__/node_modules/expo-keep-awake/ios"
   ExpoModulesCore:
-    :path: "../node_modules/expo-modules-core"
+    :path: "../node_modules/.pnpm/expo-modules-core@1.12.26/node_modules/expo-modules-core"
+  ExpoPrint:
+    :path: "../node_modules/.pnpm/expo-print@13.0.1_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0__/node_modules/expo-print/ios"
+  ExpoSharing:
+    :path: "../node_modules/.pnpm/expo-sharing@12.0.1_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0__/node_modules/expo-sharing/ios"
   ExpoSpeech:
-    :path: "../node_modules/expo-speech/ios"
+    :path: "../node_modules/.pnpm/expo-speech@12.0.2_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0__/node_modules/expo-speech/ios"
   ExpoSpeechRecognition:
-    :path: "../node_modules/expo-speech-recognition/ios"
+    :path: "../node_modules/.pnpm/expo-speech-recognition@0.2.24_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babe_wamcdsjuh4fiblonoeinbuiyyi/node_modules/expo-speech-recognition/ios"
   ExpoSystemUI:
-    :path: "../node_modules/expo-system-ui/ios"
+    :path: "../node_modules/.pnpm/expo-system-ui@3.0.7_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0__/node_modules/expo-system-ui/ios"
   ExpoWebBrowser:
-    :path: "../node_modules/expo-web-browser/ios"
+    :path: "../node_modules/.pnpm/expo-web-browser@13.0.3_expo@51.0.38_@babel+core@7.26.0_@babel+preset-env@7.26.0_@babel+core@7.26.0__/node_modules/expo-web-browser/ios"
   EXSplashScreen:
-    :path: "../node_modules/expo-splash-screen/ios"
+    :path: "../node_modules/.pnpm/expo-splash-screen@0.27.6_expo-modules-autolinking@1.11.3_expo@51.0.38_@babel+core@7.26.0_@ba_zr7wyixfxjbk67y5yx3etjigom/node_modules/expo-splash-screen/ios"
   FBLazyVector:
     :path: "../node_modules/react-native/Libraries/FBLazyVector"
   fmt:
@@ -1476,6 +1523,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   React-Mapbuffer:
     :path: "../node_modules/react-native/ReactCommon"
+  react-native-html-to-pdf:
+    :path: "../node_modules/react-native-html-to-pdf"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-voice:
@@ -1526,12 +1575,22 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativeAudioToolkit:
+    :path: "../node_modules/@react-native-community/audio-toolkit"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNCPicker:
+    :path: "../node_modules/@react-native-picker/picker"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNShare:
+    :path: "../node_modules/react-native-share"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -1547,6 +1606,8 @@ SPEC CHECKSUMS:
   ExpoHead: fcb28a68ed4ba28f177394d2dfb8a0a8824cd103
   ExpoKeepAwake: 3b8815d9dd1d419ee474df004021c69fdd316d08
   ExpoModulesCore: 831ece8311a489418746925820bbffdda587d6f4
+  ExpoPrint: 9e221bf0988c77c8a270a7df7135c65c2a396e0a
+  ExpoSharing: 8db05dd85081219f75989a3db2c92fe5e9741033
   ExpoSpeech: 258ea713923eb70ef63d3bdb14f47a462d0b6f0e
   ExpoSpeechRecognition: 36a901ca53815b795f2d3faeefed83135784827f
   ExpoSystemUI: d4f065a016cae6721b324eb659cdee4d4cf0cb26
@@ -1580,6 +1641,7 @@ SPEC CHECKSUMS:
   React-jsitracing: 3b6060bbf5317663667e1dd93560c7943ab86ccc
   React-logger: 257858bd55f3a4e1bc0cf07ddc8fb9faba6f8c7c
   React-Mapbuffer: 6c1cacdbf40b531f549eba249e531a7d0bfd8e7f
+  react-native-html-to-pdf: 4c5c6e26819fe202971061594058877aa9b25265
   react-native-safe-area-context: a240ad4b683349e48b1d51fed1611138d1bdad97
   react-native-voice: f5e8eec2278451d0017eb6a30a6ccc726aca34e0
   React-nativeconfig: ba9a2e54e2f0882cf7882698825052793ed4c851
@@ -1605,9 +1667,14 @@ SPEC CHECKSUMS:
   React-runtimescheduler: cfbe85c3510c541ec6dc815c7729b41304b67961
   React-utils: f242eb7e7889419d979ca0e1c02ccc0ea6e43b29
   ReactCommon: f7da14a8827b72704169a48c929bcde802698361
+  ReactNativeAudioToolkit: de9610f323e855ac6574be8c99621f3d57c5df06
+  RNCAsyncStorage: d35c79ffba52c1013013e16b1fc295aec2feabb6
+  RNCPicker: 3e2c37a8328f368ce14da050cdc8231deb5fc9f9
   RNGestureHandler: 2282cfbcf86c360d29f44ace393203afd5c6cff7
-  RNReanimated: 35f9ac9c3ac42d0497ebd1cce5c39d7687a8493e
+  RNPermissions: bd4e8932db57d658a7fd0395bc0ea8a344e28405
+  RNReanimated: 0b613668b7634ff9ccc8519e5520d0e0ddd16995
   RNScreens: b32a9ff15bea7fcdbe5dff6477bc503f792b1208
+  RNShare: 22717e910836a66cb7255b3b8c4ab06cbe346e27
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 950bbfd7e6f04790fdb51149ed51df41f329fcc8
 

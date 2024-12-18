@@ -3,6 +3,8 @@ import { View, ScrollView, StyleSheet, TouchableOpacity, Text, Alert } from 'rea
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { getTemplateComponent, getTemplateDetails } from '../components/templates';
 import { useFormDataContext } from '../contexts/FormDataContext';
+import { Stack } from 'expo-router';
+import BackButton from '../components/BackButton';
 
 export default function FillForm() {
   const { templateId, formId, isEditing, initialData } = useLocalSearchParams();
@@ -71,28 +73,36 @@ export default function FillForm() {
   }
 
   return (
-    <View style={styles.container}>
-      <ScrollView style={styles.formContainer}>
-        <TemplateComponent 
-          isTemplate={false} 
-          data={formData}
-          onDataChange={setFormData}
-        />
-      </ScrollView>
-      
-      <TouchableOpacity 
-        style={[
-          styles.saveButton, 
-          (loading || isSubmitting) && styles.saveButtonDisabled
-        ]}
-        onPress={handleSave}
-        disabled={loading || isSubmitting}
-      >
-        <Text style={styles.saveButtonText}>
-          {loading || isSubmitting ? 'Saving...' : isEditing ? 'Update Form' : 'Save Form'}
-        </Text>
-      </TouchableOpacity>
-    </View>
+    <>
+      <Stack.Screen
+        options={{
+          title: 'Fill Form',
+          headerLeft: () => <BackButton />,
+        }}
+      />
+      <View style={styles.container}>
+        <ScrollView style={styles.formContainer}>
+          <TemplateComponent 
+            isTemplate={false} 
+            data={formData}
+            onDataChange={setFormData}
+          />
+        </ScrollView>
+        
+        <TouchableOpacity 
+          style={[
+            styles.saveButton, 
+            (loading || isSubmitting) && styles.saveButtonDisabled
+          ]}
+          onPress={handleSave}
+          disabled={loading || isSubmitting}
+        >
+          <Text style={styles.saveButtonText}>
+            {loading || isSubmitting ? 'Saving...' : isEditing ? 'Update Form' : 'Save Form'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </>
   );
 }
 

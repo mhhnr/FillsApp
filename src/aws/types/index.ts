@@ -22,9 +22,9 @@ export interface FilledForm {
     updatedAt?: string;
 }
 
-export interface Field {
+export interface FormField {
     id: string;
-    type: 'short_text' | 'long_text' | 'multiple_choice' | 'checkbox' | 'date' | 'time' | 'scale';
+    type: FormFieldType;
     question: string;
     required: boolean;
     options?: string[];
@@ -32,7 +32,17 @@ export interface Field {
     scaleEnd?: number;
     lowLabel?: string;
     highLabel?: string;
+    characterLimit?: number;
 }
+
+export type FormFieldType = 
+    | 'short_text' 
+    | 'long_text' 
+    | 'multiple_choice' 
+    | 'checkbox' 
+    | 'date' 
+    | 'time' 
+    | 'scale';
 
 export interface FormResponse {
     fieldId: string;

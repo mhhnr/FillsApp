@@ -18,6 +18,7 @@
  *   Reanimated library's features.
  * - module-resolver: A plugin that allows for custom module 
  *   resolution paths, making imports cleaner and more manageable.
+ * - react-native-dotenv: A plugin for loading environment variables
  */
 
 module.exports = api => {
@@ -33,6 +34,16 @@ module.exports = api => {
     plugins: [
       // Plugin for React Native Reanimated
       'react-native-reanimated/plugin',
+      
+      // Plugin for environment variables
+      ["module:react-native-dotenv", {
+        "moduleName": "@env",
+        "path": ".env",
+        "blacklist": null,
+        "whitelist": null,
+        "safe": false,
+        "allowUndefined": true
+      }],
       
       // Module resolver plugin for custom path aliases
       [

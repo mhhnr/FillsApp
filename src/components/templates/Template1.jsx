@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Platform } from 'react-native';
 
 export const TEMPLATE_FIELDS = {
   patientInfo: {
@@ -158,7 +158,6 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 20,
-    fontFamily: 'outfit-medium',
     marginBottom: 16,
     textTransform: 'capitalize',
   },
@@ -167,7 +166,6 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    fontFamily: 'outfit-regular',
     marginBottom: 8,
     color: '#333333',
   },
@@ -177,7 +175,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
-    fontFamily: 'outfit-regular',
   },
   readOnlyInput: {
     backgroundColor: '#F5F5F5',

@@ -1,14 +1,12 @@
 import { Tabs } from "expo-router";
-import { View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { useAppFonts } from "../../utils/fonts";
-import LogoutButton from "../../components/LogoutButton";
+import { View, Text } from "react-native";
 import { useRouter } from "expo-router";
 import { auth } from "../../configs/FirebaseConfig";
+import { AppIcons } from "../../utils/icons";
+import LogoutButton from "../../components/LogoutButton";
 
 export default function TabLayout() {
   const router = useRouter();
-  const { fontsLoaded, onLayoutRootView } = useAppFonts();
 
   const handleLogout = async () => {
     try {
@@ -19,23 +17,25 @@ export default function TabLayout() {
     }
   };
 
-  if (!fontsLoaded) {
-    return null;
-  }
-
   return (
-    <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <Tabs 
-        screenOptions={{
-          headerRight: () => <LogoutButton onLogout={handleLogout} />,
-        }}
-      >
+    <View style={{ flex: 1 }}>
+      <Tabs>
         <Tabs.Screen
           name="talk"
           options={{
             title: "Talk",
             tabBarIcon: ({ color }) => (
-              <Ionicons name="mic-outline" size={24} color={color} />
+              <Text style={{ color, fontSize: 24 }}>{AppIcons.home}</Text>
+            ),
+            headerRight: () => <LogoutButton onLogout={handleLogout} />,
+          }}
+        />
+        <Tabs.Screen
+          name="transcribe"
+          options={{
+            title: "Transcribe",
+            tabBarIcon: ({ color }) => (
+              <Text style={{ color, fontSize: 24 }}>{AppIcons.microphone}</Text>
             ),
           }}
         />
@@ -44,7 +44,7 @@ export default function TabLayout() {
           options={{
             title: "Templates",
             tabBarIcon: ({ color }) => (
-              <Ionicons name="document-outline" size={24} color={color} />
+              <Text style={{ color, fontSize: 24 }}>{AppIcons.document}</Text>
             ),
           }}
         />
@@ -53,7 +53,7 @@ export default function TabLayout() {
           options={{
             title: "Forms",
             tabBarIcon: ({ color }) => (
-              <Ionicons name="folder-outline" size={24} color={color} />
+              <Text style={{ color, fontSize: 24 }}>{AppIcons.folder}</Text>
             ),
           }}
         />

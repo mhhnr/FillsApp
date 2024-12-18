@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { AppIcons } from '../utils/icons';
 
 export default function SelectionOverlay({ selectedCount, onCancel, onChooseTemplate }) {
   return (
     <View style={styles.overlay}>
       <TouchableOpacity onPress={onCancel} style={styles.button}>
-        <Ionicons name="close" size={24} color="#FFFFFF" />
+        <Text style={styles.icon}>{AppIcons.close}</Text>
       </TouchableOpacity>
       <Text style={styles.count}>{selectedCount} selected</Text>
       <TouchableOpacity onPress={onChooseTemplate} style={styles.button}>
@@ -42,4 +42,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'outfit-medium',
   },
+  icon: {
+    fontSize: 24,
+    color: '#FFFFFF',
+  }
 }); 

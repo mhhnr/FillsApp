@@ -1,7 +1,10 @@
+import { AWS_API_BASE_URL, AWS_REGION } from '@env';
+
+
 // AWS API Gateway endpoint
 export const API_CONFIG = {
-    BASE_URL: 'https://2zt8mwfww5.execute-api.us-east-1.amazonaws.com',
-    REGION: 'us-east-1',
+    BASE_URL: AWS_API_BASE_URL,
+    REGION: AWS_REGION,
     ENDPOINTS: {
       TEMPLATES: {
         GET: '/templates',

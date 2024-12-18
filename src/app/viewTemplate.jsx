@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useFormContext } from '../contexts/FormContext';
-import { Ionicons } from '@expo/vector-icons';
 import FormFieldEditor from '../components/FormFieldEditor';
+import { AppIcons } from '../utils/icons';
 
 export default function ViewTemplate() {
   const { templateId } = useLocalSearchParams();
@@ -39,7 +39,7 @@ export default function ViewTemplate() {
           style={styles.backButton}
           onPress={() => router.back()}
         >
-          <Ionicons name="arrow-back" size={24} color="#000" />
+          <Text style={styles.icon}>{AppIcons.back}</Text>
         </TouchableOpacity>
         <Text style={styles.title}>{template.name}</Text>
         <TouchableOpacity
@@ -53,11 +53,9 @@ export default function ViewTemplate() {
             }
           }}
         >
-          <Ionicons 
-            name={isEditing ? "save-outline" : "create-outline"} 
-            size={24} 
-            color="#000" 
-          />
+          <Text style={styles.icon}>
+            {isEditing ? AppIcons.save : AppIcons.edit}
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -104,6 +102,10 @@ const styles = StyleSheet.create({
   },
   backButton: {
     marginRight: 16,
+  },
+  icon: {
+    fontSize: 24,
+    color: '#000',
   },
   editButton: {
     marginLeft: 'auto',

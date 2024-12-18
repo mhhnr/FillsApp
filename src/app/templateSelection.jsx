@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
 import { TEMPLATE_COMPONENTS, getTemplateDetails } from '../components/templates';
 import { getTemplateIcon } from '../utils/templateUtils';
 import { filledFormsService } from '../aws/api/filledForms';
+import { AppIcons } from '../utils/icons';
 
 export default function TemplateSelection() {
   const { selectedMessages } = useLocalSearchParams();
@@ -22,20 +22,17 @@ export default function TemplateSelection() {
     try {
       setLoading(true);
       
-      // Log the received message
       console.log('Received message:', selectedMessages);
 
-      // Create the form with the exact message
       const response = await filledFormsService.createFilledForm({
         templateCode: selectedTemplate,
-        conversationText: selectedMessages, // Use the message text directly
+        conversationText: selectedMessages,
         templateFields: TEMPLATE_COMPONENTS[selectedTemplate].TEMPLATE_FIELDS
       });
 
       console.log('API Response:', response);
 
       if (response && response.data) {
-        // Ensure we have all fields from the response
         const formData = {
           patientInfo: {
             fullName: response.data.patientInfo?.fullName || '',
@@ -76,7 +73,7 @@ export default function TemplateSelection() {
           style={styles.backButton}
           onPress={() => router.back()}
         >
-          <Ionicons name="arrow-back" size={24} color="#000000" />
+          <Text style={styles.icon}>{AppIcons.back}</Text>
         </TouchableOpacity>
         <Text style={styles.title}>Select Template</Text>
         <TouchableOpacity 
@@ -111,11 +108,7 @@ export default function TemplateSelection() {
               onPress={() => handleTemplateSelect(templateId)}
             >
               <View style={styles.templateIcon}>
-                <Ionicons 
-                  name={getTemplateIcon(details.type)}
-                  size={24} 
-                  color="#007AFF" 
-                />
+                <Text style={styles.icon}>{getTemplateIcon(details.type)}</Text>
               </View>
               <View style={styles.templateInfo}>
                 <Text style={[
@@ -151,6 +144,10 @@ const styles = StyleSheet.create({
   },
   backButton: {
     padding: 8,
+  },
+  icon: {
+    fontSize: 24,
+    color: '#007AFF',
   },
   title: {
     fontSize: 20,
