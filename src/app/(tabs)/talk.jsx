@@ -16,8 +16,10 @@ import SelectionOverlay from '../../components/SelectionOverlay';
 import { useRouter } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Voice from '@react-native-voice/voice';
+import { WEBSOCKET_URL } from '@env';
 
-const WEBSOCKET_URL = 'wss://x474gm0754.execute-api.us-east-1.amazonaws.com/dev';
+
+// const WEBSOCKET_URL = 'wss://x474gm0754.execute-api.us-east-1.amazonaws.com/dev';
 const CHAT_STORAGE_KEY = '@chat_history';
 
 export default function Talk() {
