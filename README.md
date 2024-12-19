@@ -49,7 +49,7 @@
     - [Data Protection](#data-protection)
     - [API Security](#api-security)
     - [Compliance](#compliance)
-  - [📄 License](#-license)
+  - [📄 License for FillsApp V 1.0.0](#-license-for-fillsapp-v-100)
   - [💬 Support \& Contact](#-support--contact)
 
   
@@ -139,12 +139,12 @@ npx expo run:andriod
 
 </div>
 
-- 🤖 **AI-Powered Form Automation** - Smart form filling with machine learning
-- ⚡ **Real-time Processing** - Instant form validation and processing
-- 📱 **Cross-Platform** - iOS, Android, and Web support
-- 🔒 **HIPAA Compliant** - Enterprise-grade security
-- 🎙️ **Voice Input** - Hands-free form filling
-- 📑 **PDF Export** - Professional document generation
+- 📱 **Cross-Platform** - iOS (mobile, IPad), Android, and Web support
+- 🎙️ **Voice Model** - Custom trained Medical NLP model for accurate prediction. 
+- 📑 **EPIC EHR Integration** - SOP Notes, Medical Forms, Complex tables, etc just with voice.
+- 🤖 **AI-Powered Form Automation** - accurate form filling with any choice of llm
+- ⚡ **Real-time Processing** - Instant form filling, validating and processing
+  
 
 ## 🚀 Tech Stack
 
@@ -208,21 +208,7 @@ npx expo run:andriod
 <div align="center">
   <img src="assets/fillsapp.gif" alt="FillsApp Demo" width="150"/>
 </div>
-<!-- ## 📖 API Documentation
 
-[API docs placeholder] -->
-
-<!-- ## 🤝 Contributing
-
-<div align="center">
-
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge)](CONTRIBUTING.md)
-[![Contributors](https://img.shields.io/github/contributors/yourusername/fillsapp?style=for-the-badge)](https://github.com/yourusername/fillsapp/graphs/contributors)
-[![Open Issues](https://img.shields.io/github/issues/yourusername/fillsapp?style=for-the-badge)](https://github.com/yourusername/fillsapp/issues)
-
-</div>
-
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details. -->
 
 ## 🔒 Security
 
@@ -248,7 +234,7 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 - HIPAA-compliant data handling
 
 
-## 📄 License
+## 📄 License for FillsApp V 1.0.0
 
 Copyright 2024 MIT
 
