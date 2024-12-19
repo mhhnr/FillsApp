@@ -5,11 +5,11 @@
 
 ## 🔍 Overview
 
-> Fills.ai is a simple AI healthcare documentation & form filling tool for medical assistants, patients and healthcare providers. 
+> Fills.ai is a simple AI healthcare documentation tool for medical assistants, patients, specialists and healthcare providers. 
 
 > To learn more about this project business usecase please click on [fills.ai](https://fills.ai/)
 
->Now, lets discuss the technical aspectis of this project. This 1st version is built with React Native, Bedrock, Lambda, Dynaomodb and various other cutting edge technologies as you can see below. 
+>Now, lets discuss the technical aspects of this project. This version 1.0.0 is built with React Native, AWS Bedrock, Lambda, Dynaomodb and various other cutting edge technologies as you can see below. 
 
 
 <div>
@@ -29,7 +29,7 @@
   [![Expo AV](https://img.shields.io/badge/Expo_AV-14.0-000020?style=for-the-badge&logo=expo&logoColor=white)](https://docs.expo.dev/versions/latest/sdk/av/)
 </div>
 
-> This application is therefore availabe on web, andrioid , IOS platfroms. Thanks to ReactNative.
+> This application is therefore availabe on web, andrioid , IOS platfroms. Thanks to ReactNative, AWS, GCP.
 
 # Table of Contents
 - [Table of Contents](#table-of-contents)
