@@ -43,7 +43,7 @@
 [![EHR Integration](https://img.shields.io/badge/EHR-Integration-00A3E0?style=for-the-badge&logo=health&logoColor=white)](#)
 [![EPIC Compatible](https://img.shields.io/badge/EPIC-Compatible-7D2E68?style=for-the-badge&logo=epic-games&logoColor=white)](#)
 [![HL7 FHIR](https://img.shields.io/badge/HL7-FHIR-E31837?style=for-the-badge&logo=health&logoColor=white)](#)
-[![Medical AI](https://img.shields.io/badge/Medical-AI-00B4CC?style=for-the-badge&logo=ai&logoColor=white)](#)
+
 [![Secure PHI](https://img.shields.io/badge/Secure-PHI-2E8B57?style=for-the-badge&logo=security&logoColor=white)](#)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-FF6F61?style=for-the-badge&logo=tensorflow&logoColor=white)](#)
 
@@ -244,7 +244,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 
 <div align="center">
-  <sub>Built with passion and ❤️ by Hari Hara Nithin Reddy</sub>
+  <sub>Built with passion and ❤️ by M Hari Hara Nithin Reddy</sub>
   <br/>
   <sub>© 2024 Fills Ai LLC. All rights reserved.</sub>
 </div>
