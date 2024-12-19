@@ -1,16 +1,16 @@
-# FillsApp 🏥
-
-> An AI-powered medical form automation platform built with React Native and Firebase.
-
 <div align="center">
+  <h1>Fills.Ai</h1>
   <img src="assets/logo.png" alt="FillsApp Logo" width="50"/>
-  <br/>
-
 </div>
 
-<div align="center">
-  <img src="assets/fillsapp.gif" alt="FillsApp Demo" width="150"/>
-</div>
+## 🔍 Overview
+
+> Fills.ai is a simple AI healthcare documentation & form filling tool for medical assistants, patients and healthcare providers. 
+
+> To learn more about this project business usecase please click on [fills.ai](https://fills.ai/)
+
+>Now, lets discuss the technical aspectis of this project. This 1st version is built with React Native, Bedrock, Lambda, Dynaomodb and various other cutting edge technologies as you can see below. 
+
 
 <div>
 <br/>
@@ -19,23 +19,28 @@
   [![Expo](https://img.shields.io/badge/Expo-51.0-000020?style=for-the-badge&logo=expo&logoColor=white)](https://expo.dev/)
   [![Firebase](https://img.shields.io/badge/Firebase-11.0-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+  [![AWS](https://img.shields.io/badge/AWS-Cloud-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/)
+  [![DynamoDB](https://img.shields.io/badge/DynamoDB-4053D6?style=for-the-badge&logo=amazon-dynamodb&logoColor=white)](https://aws.amazon.com/dynamodb/)
+  [![Lambda](https://img.shields.io/badge/Lambda-FF9900?style=for-the-badge&logo=aws-lambda&logoColor=white)](https://aws.amazon.com/lambda/)
+  [![API Gateway](https://img.shields.io/badge/API_Gateway-FF9900?style=for-the-badge&logo=amazon-api-gateway&logoColor=white)](https://aws.amazon.com/api-gateway/)
+  [![Amazon Bedrock](https://img.shields.io/badge/Amazon_Bedrock-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/bedrock/)
+  [![Amazon Transcribe](https://img.shields.io/badge/Amazon_Transcribe-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/transcribe/)
+  [![React Navigation](https://img.shields.io/badge/React_Navigation-6.0-f7f7f7?style=for-the-badge&logo=react&logoColor=black)](https://reactnavigation.org/)
+  [![Expo AV](https://img.shields.io/badge/Expo_AV-14.0-000020?style=for-the-badge&logo=expo&logoColor=white)](https://docs.expo.dev/versions/latest/sdk/av/)
 </div>
 
-## 📑 Table of Contents
+> This application is therefore availabe on web, andrioid , IOS platfroms. Thanks to ReactNative.
 
-- [FillsApp 🏥](#fillsapp-)
-  - [📑 Table of Contents](#-table-of-contents)
-  - [🔍 Overview](#-overview)
+# Table of Contents
+- [Table of Contents](#table-of-contents)
+  - [🤝 Getting Started (Prerequisites)](#-getting-started-prerequisites)
+    - [Installation](#installation)
   - [✨ Features](#-features)
   - [🚀 Tech Stack](#-tech-stack)
     - [Frontend](#frontend)
     - [Backend](#backend)
     - [AI/ML](#aiml)
   - [🏗 Architecture](#-architecture)
-  - [📊 Performance](#-performance)
-  - [🤝 Getting Started](#-getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Installation](#installation)
   - [📦 Backend Deployment](#-backend-deployment)
     - [Cloud Infrastructure](#cloud-infrastructure)
     - [AWS Services](#aws-services)
@@ -52,9 +57,78 @@
   - [📄 License](#-license)
   - [💬 Support \& Contact](#-support--contact)
 
-## 🔍 Overview
+  
 
-FillsApp revolutionizes medical form management through AI-powered automation, streamlining healthcare documentation for both patients and providers.
+
+## 🤝 Getting Started (Prerequisites)
+
+1. **Development Environment**:
+   - Node.js
+   - npm or yarn package manager
+   - Expo CLI (`expo-cli`)
+
+2. **Mobile Development Tools**:
+   - For iOS development:
+     - macOS computer
+     - Xcode (latest version recommended)
+     - iOS Simulator or physical iOS device
+   
+   - For Android development:
+     - Android Studio
+     - Android SDK
+     - Android Emulator or physical Android device
+
+3. **Firebase Setup**:
+   - Firebase account
+   - Firebase project
+   - Firebase configuration (the app uses Firebase Authentication)
+
+4. **AWS Setup**:
+   - AWS account
+   - API Gateway endpoints (REST APIs, Websocket API) configured (as shown in `aws-config.js`)
+   - SAM (IaC) Template will be provided very soon, right now all Temp API keys are availabe in the code, just follow the installation procedure.
+
+5. **Key Dependencies** :
+   - React Native (0.74.5)
+   - Expo (^51.0.38)
+   - React Navigation (^6.0.2)
+   - Firebase (^11.0.1)
+   - Various Expo packages for:
+     - Audio handling (expo-av ~14.0.7)
+     - Voice recognition (@react-native-voice/voice ^3.2.4)
+     - File system operations (expo-modules-core ~1.12.26)
+     - PDF generation (expo-print ~13.0.1, react-native-html-to-pdf ^0.12.0)
+     - Gesture handling (react-native-gesture-handler ~2.16.1)
+
+6. **Development Environment Variables**:
+   - Firebase configuration
+   - AWS API endpoints configuration
+
+7. **Device Permissions**:
+   The app requires several device permissions for:
+   - Microphone access (for voice recording)
+   - File system access (for PDF generation)
+   - Camera (if using QR code scanning features)
+
+
+### Installation
+```bash
+# Clone the repository
+git clone https://github.com/mhhnn/FillsApp.git
+
+# Navigate to project directory
+cd FillsApp
+
+# Install dependencies
+pnpm i
+
+# Start the app on ios
+npx expo run:ios
+
+# Start the app on android
+npx expo run:andriod
+```
+
 
 ## ✨ Features
 
@@ -108,40 +182,8 @@ FillsApp revolutionizes medical form management through AI-powered automation, s
   
 </div>
 
-## 📊 Performance
 
-<div align="center">
 
-![Performance](https://img.shields.io/badge/Performance-95%25-success?style=for-the-badge)
-![Uptime](https://img.shields.io/badge/Uptime-99.9%25-success?style=for-the-badge)
-![Build](https://img.shields.io/badge/Build-Passing-success?style=for-the-badge)
-
-</div>
-
-## 🤝 Getting Started
-
-### Prerequisites
-- Node.js ≥ 18
-- npm/yarn
-- Expo CLI
-
-### Installation
-```bash
-# Clone the repository
-git clone https://github.com/mhhnn/FillsApp.git
-
-# Navigate to project directory
-cd FillsApp
-
-# Install dependencies
-pnpm i
-
-# Start the app on ios
-npx expo run:ios
-
-# Start the app on android
-npx expo run:andriod
-```
 
 ## 📦 Backend Deployment
 
@@ -160,7 +202,7 @@ npx expo run:andriod
 #### API Gateway Endpoints
 - **HTTP API**: Form submission and retrieval
 - **REST API**: Template management
-- **WebSocket**: Talk chatbox
+- **WebSocket**: Talk 
 
 
 #### Lambda Functions
@@ -239,16 +281,16 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 <div align="center">
 
-
 [![Email](https://img.shields.io/badge/Email-ceo%40fills.ai-red?style=for-the-badge&logo=gmail&logoColor=white)](mailto:ceo@fills.ai)
-
-
 </div>
 
-- website: [fills.ai](https://docs.fillsapp.com)
-- Email: ceo@fills.ai
+  - website: [fills.ai](https://docs.fillsapp.com)
+  - Email: ceo@fills.ai
 
----
+<div align="center">
+  <img src="assets/fillsapp.gif" alt="FillsApp Demo" width="150"/>
+</div>
+
 
 <div align="center">
   <sub>Built with passion and ❤️ by Hari Hara Nithin Reddy</sub>
