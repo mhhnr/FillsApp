@@ -5,10 +5,7 @@
 <div align="center">
   <img src="assets/logo.png" alt="FillsApp Logo" width="50"/>
   <br/>
-  
 
-  [![MIT License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
-  
 </div>
 
 <div align="center">
@@ -105,7 +102,11 @@ FillsApp revolutionizes medical form management through AI-powered automation, s
 
 ## 🏗 Architecture
 
-[Architecture section placeholder]
+<div align="center">
+  <img src="assets/architecture.png" alt="FillsApp Architecture"/>
+  <br/>
+  
+</div>
 
 ## 📊 Performance
 
