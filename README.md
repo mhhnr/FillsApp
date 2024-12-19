@@ -37,18 +37,13 @@
     - [Installation](#installation)
   - [✨ Features](#-features)
   - [🚀 Tech Stack](#-tech-stack)
-    - [Frontend](#frontend)
-    - [Backend](#backend)
-    - [AI/ML](#aiml)
+- [V 1.0.0 :](#v-100-)
   - [🏗 Architecture](#-architecture)
-  - [📦 Backend Deployment](#-backend-deployment)
-    - [Cloud Infrastructure](#cloud-infrastructure)
-    - [AWS Services](#aws-services)
       - [API Gateway Endpoints](#api-gateway-endpoints)
       - [Lambda Functions](#lambda-functions)
       - [AI Integration](#ai-integration)
       - [Database](#database)
-    - [Security \& Authentication](#security--authentication)
+  - [Demo](#demo)
   - [🔒 Security](#-security)
     - [Authentication \& Authorization](#authentication--authorization)
     - [Data Protection](#data-protection)
@@ -135,9 +130,12 @@ npx expo run:andriod
 <div align="center">
 
 [![HIPAA Compliant](https://img.shields.io/badge/HIPAA-Compliant-success?style=for-the-badge)](https://www.hhs.gov/hipaa/index.html)
-[![Cloud Storage](https://img.shields.io/badge/Cloud-Storage-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)](https://firebase.google.com/products/storage)
+[![EHR Integration](https://img.shields.io/badge/EHR-Integration-00A3E0?style=for-the-badge&logo=health&logoColor=white)](#)
+[![EPIC Compatible](https://img.shields.io/badge/EPIC-Compatible-7D2E68?style=for-the-badge&logo=epic-games&logoColor=white)](#)
+[![HL7 FHIR](https://img.shields.io/badge/HL7-FHIR-E31837?style=for-the-badge&logo=health&logoColor=white)](#)
+[![Medical AI](https://img.shields.io/badge/Medical-AI-00B4CC?style=for-the-badge&logo=ai&logoColor=white)](#)
+[![Secure PHI](https://img.shields.io/badge/Secure-PHI-2E8B57?style=for-the-badge&logo=security&logoColor=white)](#)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-FF6F61?style=for-the-badge&logo=tensorflow&logoColor=white)](#)
-[![Voice Input](https://img.shields.io/badge/Voice-Input-4285F4?style=for-the-badge&logo=google&logoColor=white)](#)
 
 </div>
 
@@ -153,26 +151,27 @@ npx expo run:andriod
 <div align="center">
 
 [![React Native](https://img.shields.io/badge/React_Native-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactnative.dev/)
-[![Expo](https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=expo&logoColor=white)](https://expo.dev/)
+[![Svelte](https://img.shields.io/badge/Svelte-FF3E00?style=for-the-badge&logo=svelte&logoColor=white)](https://svelte.dev/)
+[![DynamoDB](https://img.shields.io/badge/DynamoDB-4053D6?style=for-the-badge&logo=amazon-dynamodb&logoColor=white)](https://aws.amazon.com/dynamodb/)
+[![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white)](https://openai.com/)
+[![LangChain](https://img.shields.io/badge/LangChain-121212?style=for-the-badge&logo=chainlink&logoColor=white)](https://langchain.com/)
+[![Google Multimodal API](https://img.shields.io/badge/Google_Multimodal_API-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://cloud.google.com/)
+[![Google Speech Medical](https://img.shields.io/badge/Speech_Medical_API-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)](https://cloud.google.com/speech-to-text)
+[![Eleven Labs](https://img.shields.io/badge/Eleven_Labs-000000?style=for-the-badge&logo=eleven&logoColor=white)](https://elevenlabs.io/)
+[![AWS Transcribe Medical](https://img.shields.io/badge/AWS_Transcribe_Medical-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/transcribe/medical/)
+[![Hasura](https://img.shields.io/badge/Hasura-1EB4D4?style=for-the-badge&logo=hasura&logoColor=white)](https://hasura.io/)
+[![GraphQL](https://img.shields.io/badge/GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white)](https://graphql.org/)
+[![nHost](https://img.shields.io/badge/nHost-121212?style=for-the-badge&logo=serverless&logoColor=white)](https://nhost.io/)
+[![LangFlow](https://img.shields.io/badge/LangFlow-00A3E0?style=for-the-badge&logo=flow&logoColor=white)](https://langflow.org/)
+[![LangGraph](https://img.shields.io/badge/LangGraph-34D399?style=for-the-badge&logo=graph&logoColor=white)](https://langgraph.com/)
+[![Crew AI](https://img.shields.io/badge/Crew_AI-FF4B4B?style=for-the-badge&logo=robot&logoColor=white)](https://crew.ai/)
 [![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![TensorFlow](https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white)](https://www.tensorflow.org/)
+[![Google MFA](https://img.shields.io/badge/Google_MFA-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://cloud.google.com/identity)
+
 
 </div>
 
-### Frontend
-- React Native
-- Expo
-- React Navigation
-
-### Backend
-- Firebase
-- Cloud Functions
-- Cloud Storage
-
-### AI/ML
-- TensorFlow
-- Natural Language Processing
+# V 1.0.0 : 
 
 ## 🏗 Architecture
 
@@ -183,26 +182,10 @@ npx expo run:andriod
 </div>
 
 
-
-
-## 📦 Backend Deployment
-
-### Cloud Infrastructure
-
-<div align="center">
-
-[![AWS](https://img.shields.io/badge/AWS-Cloud-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)](#)
-[![Firebase](https://img.shields.io/badge/Firebase-Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](#)
-[![DynamoDB](https://img.shields.io/badge/DynamoDB-4053D6?style=for-the-badge&logo=amazon-dynamodb&logoColor=white)](#)
-
-</div>
-
-### AWS Services
-
 #### API Gateway Endpoints
 - **HTTP API**: Form submission and retrieval
 - **REST API**: Template management
-- **WebSocket**: Talk 
+- **WebSocket**: Chatbox 
 
 
 #### Lambda Functions
@@ -220,12 +203,11 @@ npx expo run:andriod
   - Templates table
   - User profile
 
-### Security & Authentication
-- Firebase Authorizer for API Gateway
-- JWT token validation
-- Role-based access control
-- CORS configuration
 
+## Demo
+<div align="center">
+  <img src="assets/fillsapp.gif" alt="FillsApp Demo" width="150"/>
+</div>
 <!-- ## 📖 API Documentation
 
 [API docs placeholder] -->
@@ -287,9 +269,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   - website: [fills.ai](https://docs.fillsapp.com)
   - Email: ceo@fills.ai
 
-<div align="center">
-  <img src="assets/fillsapp.gif" alt="FillsApp Demo" width="150"/>
-</div>
+
 
 
 <div align="center">
