@@ -3,63 +3,91 @@
   <img src="assets/logo.png" alt="FillsApp Logo" width="50"/>
 </div>
 
+
+
 ## 🔍 Overview
 
-> Fills.ai is a simple AI healthcare documentation & form filling tool for medical assistants, patients and healthcare providers. 
+> Fills.ai is a simple and fast AI healthcare documentation tool for medical assistants, patients, specialists and healthcare providers saving 60% of their documentation time. 
 
 > To learn more about this project business usecase please click on [fills.ai](https://fills.ai/)
 
->Now, lets discuss the technical aspectis of this project. This 1st version is built with React Native, Bedrock, Lambda, Dynaomodb and various other cutting edge technologies as you can see below. 
-
-
-<div>
-<br/>
-  
-  [![React Native](https://img.shields.io/badge/React_Native-0.74-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://reactnative.dev/)
-  [![Expo](https://img.shields.io/badge/Expo-51.0-000020?style=for-the-badge&logo=expo&logoColor=white)](https://expo.dev/)
-  [![Firebase](https://img.shields.io/badge/Firebase-11.0-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
-  [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-  [![AWS](https://img.shields.io/badge/AWS-Cloud-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/)
-  [![DynamoDB](https://img.shields.io/badge/DynamoDB-4053D6?style=for-the-badge&logo=amazon-dynamodb&logoColor=white)](https://aws.amazon.com/dynamodb/)
-  [![Lambda](https://img.shields.io/badge/Lambda-FF9900?style=for-the-badge&logo=aws-lambda&logoColor=white)](https://aws.amazon.com/lambda/)
-  [![API Gateway](https://img.shields.io/badge/API_Gateway-FF9900?style=for-the-badge&logo=amazon-api-gateway&logoColor=white)](https://aws.amazon.com/api-gateway/)
-  [![Amazon Bedrock](https://img.shields.io/badge/Amazon_Bedrock-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/bedrock/)
-  [![Amazon Transcribe](https://img.shields.io/badge/Amazon_Transcribe-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/transcribe/)
-  [![React Navigation](https://img.shields.io/badge/React_Navigation-6.0-f7f7f7?style=for-the-badge&logo=react&logoColor=black)](https://reactnavigation.org/)
-  [![Expo AV](https://img.shields.io/badge/Expo_AV-14.0-000020?style=for-the-badge&logo=expo&logoColor=white)](https://docs.expo.dev/versions/latest/sdk/av/)
-</div>
-
-> This application is therefore availabe on web, andrioid , IOS platfroms. Thanks to ReactNative.
 
 # Table of Contents
 - [Table of Contents](#table-of-contents)
-  - [🤝 Getting Started (Prerequisites)](#-getting-started-prerequisites)
-    - [Installation](#installation)
   - [✨ Features](#-features)
   - [🚀 Tech Stack](#-tech-stack)
-    - [Frontend](#frontend)
-    - [Backend](#backend)
-    - [AI/ML](#aiml)
+- [V 1.0.0 :](#v-100-)
+  - [🤝 Getting Started (Prerequisites)](#-getting-started-prerequisites)
+    - [Installation](#installation)
   - [🏗 Architecture](#-architecture)
-  - [📦 Backend Deployment](#-backend-deployment)
-    - [Cloud Infrastructure](#cloud-infrastructure)
-    - [AWS Services](#aws-services)
       - [API Gateway Endpoints](#api-gateway-endpoints)
       - [Lambda Functions](#lambda-functions)
       - [AI Integration](#ai-integration)
       - [Database](#database)
-    - [Security \& Authentication](#security--authentication)
+  - [Demo](#demo)
   - [🔒 Security](#-security)
     - [Authentication \& Authorization](#authentication--authorization)
     - [Data Protection](#data-protection)
     - [API Security](#api-security)
     - [Compliance](#compliance)
-  - [📄 License](#-license)
+  - [📄 License for FillsApp V 1.0.0](#-license-for-fillsapp-v-100)
   - [💬 Support \& Contact](#-support--contact)
 
   
 
+## ✨ Features
 
+<div align="center">
+
+[![HIPAA Compliant](https://img.shields.io/badge/HIPAA-Compliant-success?style=for-the-badge)](https://www.hhs.gov/hipaa/index.html)
+[![EHR Integration](https://img.shields.io/badge/EHR-Integration-00A3E0?style=for-the-badge&logo=health&logoColor=white)](#)
+[![EPIC Compatible](https://img.shields.io/badge/EPIC-Compatible-7D2E68?style=for-the-badge&logo=epic-games&logoColor=white)](#)
+[![HL7 FHIR](https://img.shields.io/badge/HL7-FHIR-E31837?style=for-the-badge&logo=health&logoColor=white)](#)
+
+[![Secure PHI](https://img.shields.io/badge/Secure-PHI-2E8B57?style=for-the-badge&logo=security&logoColor=white)](#)
+[![AI Powered](https://img.shields.io/badge/AI-Powered-FF6F61?style=for-the-badge&logo=tensorflow&logoColor=white)](#)
+
+</div>
+
+- 📱 **Cross-Platform** - iOS (mobile, IPad), Android, and Web support
+- 🎙️ **Voice Model** - Custom trained Medical NLP model for accurate prediction. 
+- 📑 **EPIC EHR Integration** - SOP Notes, Medical Forms, Complex tables, etc just with voice.
+- 🤖 **AI-Powered Form Automation** - accurate form filling with any choice of llm
+- ⚡ **Real-time Processing** - Instant form filling, validating and processing
+  
+
+## 🚀 Tech Stack
+
+<div align="center">
+
+[![React Native](https://img.shields.io/badge/React_Native-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactnative.dev/)
+[![Svelte](https://img.shields.io/badge/Svelte-FF3E00?style=for-the-badge&logo=svelte&logoColor=white)](https://svelte.dev/)
+[![DynamoDB](https://img.shields.io/badge/DynamoDB-4053D6?style=for-the-badge&logo=amazon-dynamodb&logoColor=white)](https://aws.amazon.com/dynamodb/)
+[![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white)](https://openai.com/)
+[![LangChain](https://img.shields.io/badge/LangChain-121212?style=for-the-badge&logo=chainlink&logoColor=white)](https://langchain.com/)
+[![Google Multimodal API](https://img.shields.io/badge/Google_Multimodal_API-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://cloud.google.com/)
+[![Google Speech Medical](https://img.shields.io/badge/Speech_Medical_API-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)](https://cloud.google.com/speech-to-text)
+[![Eleven Labs](https://img.shields.io/badge/Eleven_Labs-000000?style=for-the-badge&logo=eleven&logoColor=white)](https://elevenlabs.io/)
+[![AWS Transcribe Medical](https://img.shields.io/badge/AWS_Transcribe_Medical-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/transcribe/medical/)
+[![LangFlow](https://img.shields.io/badge/LangFlow-00A3E0?style=for-the-badge&logo=flow&logoColor=white)](https://langflow.org/)
+[![LangGraph](https://img.shields.io/badge/LangGraph-34D399?style=for-the-badge&logo=graph&logoColor=white)](https://langgraph.com/)
+[![Crew AI](https://img.shields.io/badge/Crew_AI-FF4B4B?style=for-the-badge&logo=robot&logoColor=white)](https://crew.ai/)
+[![Google MFA](https://img.shields.io/badge/Google_MFA-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://cloud.google.com/identity)
+  [![Expo](https://img.shields.io/badge/Expo-51.0-000020?style=for-the-badge&logo=expo&logoColor=white)](https://expo.dev/)
+  [![Firebase](https://img.shields.io/badge/Firebase-11.0-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+  [![AWS](https://img.shields.io/badge/AWS-Cloud-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/)
+[![Lambda](https://img.shields.io/badge/Lambda-FF9900?style=for-the-badge&logo=aws-lambda&logoColor=white)](https://aws.amazon.com/lambda/)
+[![API Gateway](https://img.shields.io/badge/API_Gateway-FF9900?style=for-the-badge&logo=amazon-api-gateway&logoColor=white)](https://aws.amazon.com/api-gateway/)
+[![Amazon Bedrock](https://img.shields.io/badge/Amazon_Bedrock-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/bedrock/)
+[![Amazon Transcribe](https://img.shields.io/badge/Amazon_Transcribe-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/transcribe/)
+</div>
+
+# V 1.0.0 : 
+> This app is built with React Native, AWS Bedrock, Lambda, Dynaomodb and various other cutting edge technologies. 
+
+> This application is therefore availabe on web, andrioid , IOS platfroms. Thanks to ReactNative, AWS, GCP.
+> 
 ## 🤝 Getting Started (Prerequisites)
 
 1. **Development Environment**:
@@ -130,50 +158,6 @@ npx expo run:andriod
 ```
 
 
-## ✨ Features
-
-<div align="center">
-
-[![HIPAA Compliant](https://img.shields.io/badge/HIPAA-Compliant-success?style=for-the-badge)](https://www.hhs.gov/hipaa/index.html)
-[![Cloud Storage](https://img.shields.io/badge/Cloud-Storage-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)](https://firebase.google.com/products/storage)
-[![AI Powered](https://img.shields.io/badge/AI-Powered-FF6F61?style=for-the-badge&logo=tensorflow&logoColor=white)](#)
-[![Voice Input](https://img.shields.io/badge/Voice-Input-4285F4?style=for-the-badge&logo=google&logoColor=white)](#)
-
-</div>
-
-- 🤖 **AI-Powered Form Automation** - Smart form filling with machine learning
-- ⚡ **Real-time Processing** - Instant form validation and processing
-- 📱 **Cross-Platform** - iOS, Android, and Web support
-- 🔒 **HIPAA Compliant** - Enterprise-grade security
-- 🎙️ **Voice Input** - Hands-free form filling
-- 📑 **PDF Export** - Professional document generation
-
-## 🚀 Tech Stack
-
-<div align="center">
-
-[![React Native](https://img.shields.io/badge/React_Native-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactnative.dev/)
-[![Expo](https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=expo&logoColor=white)](https://expo.dev/)
-[![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![TensorFlow](https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white)](https://www.tensorflow.org/)
-
-</div>
-
-### Frontend
-- React Native
-- Expo
-- React Navigation
-
-### Backend
-- Firebase
-- Cloud Functions
-- Cloud Storage
-
-### AI/ML
-- TensorFlow
-- Natural Language Processing
-
 ## 🏗 Architecture
 
 <div align="center">
@@ -183,26 +167,10 @@ npx expo run:andriod
 </div>
 
 
-
-
-## 📦 Backend Deployment
-
-### Cloud Infrastructure
-
-<div align="center">
-
-[![AWS](https://img.shields.io/badge/AWS-Cloud-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)](#)
-[![Firebase](https://img.shields.io/badge/Firebase-Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](#)
-[![DynamoDB](https://img.shields.io/badge/DynamoDB-4053D6?style=for-the-badge&logo=amazon-dynamodb&logoColor=white)](#)
-
-</div>
-
-### AWS Services
-
 #### API Gateway Endpoints
 - **HTTP API**: Form submission and retrieval
 - **REST API**: Template management
-- **WebSocket**: Talk 
+- **WebSocket**: Chatbox 
 
 
 #### Lambda Functions
@@ -220,27 +188,12 @@ npx expo run:andriod
   - Templates table
   - User profile
 
-### Security & Authentication
-- Firebase Authorizer for API Gateway
-- JWT token validation
-- Role-based access control
-- CORS configuration
 
-<!-- ## 📖 API Documentation
-
-[API docs placeholder] -->
-
-<!-- ## 🤝 Contributing
-
+## Demo
 <div align="center">
-
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge)](CONTRIBUTING.md)
-[![Contributors](https://img.shields.io/github/contributors/yourusername/fillsapp?style=for-the-badge)](https://github.com/yourusername/fillsapp/graphs/contributors)
-[![Open Issues](https://img.shields.io/github/issues/yourusername/fillsapp?style=for-the-badge)](https://github.com/yourusername/fillsapp/issues)
-
+  <img src="assets/fillsapp.gif" alt="FillsApp Demo" width="150"/>
 </div>
 
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details. -->
 
 ## 🔒 Security
 
@@ -266,7 +219,7 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 - HIPAA-compliant data handling
 
 
-## 📄 License
+## 📄 License for FillsApp V 1.0.0
 
 Copyright 2024 MIT
 
@@ -287,13 +240,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   - website: [fills.ai](https://docs.fillsapp.com)
   - Email: ceo@fills.ai
 
-<div align="center">
-  <img src="assets/fillsapp.gif" alt="FillsApp Demo" width="150"/>
-</div>
+
 
 
 <div align="center">
-  <sub>Built with passion and ❤️ by Hari Hara Nithin Reddy</sub>
+  <sub>Built with passion and ❤️ by M Hari Hara Nithin Reddy</sub>
   <br/>
   <sub>© 2024 Fills Ai LLC. All rights reserved.</sub>
 </div>
