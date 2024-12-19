@@ -51,7 +51,7 @@
 
 - 📱 **Cross-Platform** - iOS (mobile, IPad), Android, and Web support
 - 🎙️ **Voice Model** - Custom trained Medical NLP model for accurate prediction. 
-- 📑 **EPIC EHR Integration** - SOP Notes, Medical Forms, Complex tables, etc just with voice.
+- 📑 **EPIC EHR Integration** - SOAP Notes, Medical Forms, Complex tables, etc just with voice.
 - 🤖 **AI-Powered Form Automation** - accurate form filling with any choice of llm
 - ⚡ **Real-time Processing** - Instant form filling, validating and processing
   
