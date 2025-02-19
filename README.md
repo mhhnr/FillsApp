@@ -309,7 +309,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 <div align="center">
 
-[![Email](https://img.shields.io/badge/Email-ceo%40fills.ai-red?style=for-the-badge&logo=gmail&logoColor=white)](mailto:ceo@fills.ai)
+[![Email](https://img.shields.io/badge/Email-ceo%40fills.ai-red?style=for-the-badge&logo=gmail&logoColor=white)](mailto:nithin@fills.ai)
 </div>
 
   - website: [fills.ai](https://docs.fillsapp.com)
